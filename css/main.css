@@ -1,0 +1,18 @@
+.main {
+    margin-top: 60px;
+}
+
+.sidebar ul {
+    margin: 10px 0;
+}
+
+#absolute-alert {
+    position: fixed;
+    z-index: 5000;
+    margin: auto;
+    top: 30px;
+    left: 0;
+    right: 0;
+    width: 60%;
+    display: none;
+}

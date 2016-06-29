@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Awaker</title>
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+
+    <!-- Bootstrap funktioniert noch nicht mit jQuery v3 -->
+    <script src="js/jquery-2.2.4.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/command.js"></script>
+    <script src="js/connect.js"></script>
+    <script src="js/handlebars-v4.0.5.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/status.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Aktuelle Seite</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container main">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-xs-6 col-sm-3 sidebar hidden-xs">
+            <ul class="nav">
+                <li><a href="#">Licht</a></li>
+            </ul>
+            <ul class="nav">
+                <li><a href="#">Alle Tracks</a></li>
+            </ul>
+            <ul class="nav">
+                <li><a href="#">Künstler</a></li>
+                <li><a href="#">Alben</a></li>
+                <li><a href="#">Playlists</a></li>
+            </ul>
+        </div>
+
+        <!-- main content-->
+        <div class="col-xs-12 col-sm-9">
+            <div id="music-list" class="list-group">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="absolute-alert" class="alert alert-danger" role="alert">
+    <strong>Warnung</strong>
+    <span>Text</span>
+</div>
+
+<script id="music-list-item-template" type="text/x-handlebars-template">
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">Titel</h4>
+        <span>Künstler</span>
+    </a>
+</script>
+</body>
+</html>
