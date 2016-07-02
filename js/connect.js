@@ -1,30 +1,47 @@
 /**
  * Created by Patrick on 28.06.2016.
  */
-var connect = {};
+var connect = {
+    status: new Status()
+};
 
 connect.init = function () {
     var socket = new WebSocket("ws://localhost:4733");
-    socket.onClose = connect.onClose;
-    socket.onmessage = connect.onmessage;
-    socket.onopen = connect.onopen;
-    socket.onerror = connect.onerror;
+    socket.onopen = connect.onOpen;
+    socket.onclose = connect.onClose;
+    socket.onmessage = connect.onMessage;
+    socket.onerror = connect.onError;
     connect.socket = socket;
 };
 
-connect.onOpen = function (e) {
-    connect.socket.send("hello");
+connect.onOpen = function () {
+    console.log("open");
+    connect.send(new Command().getLibrary());
 };
 
 connect.onMessage = function (e) {
     var answer = JSON.parse(e.data);
-    //e.data
+    console.log(answer);
+    var newTrack = connect.status.updateStatus(answer);
+    if (answer.type == "library") {
+        musicListController.newLibrary();
+    }
+    if (answer.type == "library" || answer.type == "status") {
+        playbarController.applyNewStatus(connect.status, newTrack);
+    }
 };
 
 connect.onClose = function (e) {
-
+    console.log(e);
+    util.showAlert("Fehler", "Verbindung getrennt", "danger");
 };
 
 connect.onError = function (e) {
+    util.showAlert("Fehler", e.toString(), "danger");
+};
 
+connect.send = function (command) {
+    var msg = JSON.stringify(command);
+    console.log(msg);
+    connect.socket.send(msg);
 };

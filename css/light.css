@@ -1,0 +1,10 @@
+
+#view-light .slider-selection {
+    background: #BABABA;
+}
+
+#view-light .slider {
+    display: block;
+    margin: 0 15px;
+    width: auto;
+}

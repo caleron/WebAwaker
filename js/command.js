@@ -9,7 +9,17 @@ function Command() {
  * @returns {Command}
  */
 Command.prototype.play = function () {
-    this.command = commands.PLAY;
+    this.action = commands.PLAY;
+    return this;
+};
+/**
+ * Spielt einen Track im Kontext der AllTracks-PlayList ab.
+ * @param {Number} trackId Die ID des Tracks
+ * @returns {Command}
+ */
+Command.prototype.playId = function (trackId) {
+    this.action = commands.PLAY_ID;
+    this.trackId = trackId;
     return this;
 };
 
@@ -19,7 +29,7 @@ Command.prototype.play = function () {
  * @returns {Command}
  */
 Command.prototype.playFromPosition = function (position) {
-    this.command = commands.PLAY_FROM_POSITION;
+    this.action = commands.PLAY_FROM_POSITION;
     this.position = position;
     return this;
 };
@@ -29,7 +39,7 @@ Command.prototype.playFromPosition = function (position) {
  * @returns {Command}
  */
 Command.prototype.pause = function () {
-    this.command = commands.PAUSE;
+    this.action = commands.PAUSE;
     return this;
 };
 
@@ -38,7 +48,7 @@ Command.prototype.pause = function () {
  * @returns {Command}
  */
 Command.prototype.stop = function () {
-    this.command = commands.STOP;
+    this.action = commands.STOP;
     return this;
 };
 
@@ -47,7 +57,7 @@ Command.prototype.stop = function () {
  * @returns {Command}
  */
 Command.prototype.togglePlayPause = function () {
-    this.command = commands.TOGGLE_PLAY_PAUSE;
+    this.action = commands.TOGGLE_PLAY_PAUSE;
     return this;
 };
 
@@ -56,7 +66,7 @@ Command.prototype.togglePlayPause = function () {
  * @returns {Command}
  */
 Command.prototype.playNext = function () {
-    this.command = commands.PLAY_NEXT;
+    this.action = commands.PLAY_NEXT;
     return this;
 };
 
@@ -65,7 +75,7 @@ Command.prototype.playNext = function () {
  * @returns {Command}
  */
 Command.prototype.playPrevious = function () {
-    this.command = commands.PLAY_PREVIOUS;
+    this.action = commands.PLAY_PREVIOUS;
     return this;
 };
 
@@ -75,7 +85,7 @@ Command.prototype.playPrevious = function () {
  * @returns {Command}
  */
 Command.prototype.setShuffle = function (shuffle) {
-    this.command = commands.SET_SHUFFLE;
+    this.action = commands.SET_SHUFFLE;
     this.shuffle = shuffle;
     return this;
 };
@@ -86,7 +96,7 @@ Command.prototype.setShuffle = function (shuffle) {
  * @returns {Command}
  */
 Command.prototype.setRepeatMode = function (mode) {
-    this.command = commands.SET_REPEAT_MODE;
+    this.action = commands.SET_REPEAT_MODE;
     this.repeatMode = mode;
     return this;
 };
@@ -96,7 +106,7 @@ Command.prototype.setRepeatMode = function (mode) {
  * @returns {Command}
  */
 Command.prototype.setVolume = function (volume) {
-    this.command = commands.SET_VOLUME;
+    this.action = commands.SET_VOLUME;
     this.volume = volume;
     return this;
 };
@@ -106,7 +116,7 @@ Command.prototype.setVolume = function (volume) {
  * @returns {Command}
  */
 Command.prototype.createPlaylist = function (name) {
-    this.command = commands.CREATE_PLAYLIST;
+    this.action = commands.CREATE_PLAYLIST;
     this.name = name;
     return this;
 };
@@ -116,7 +126,7 @@ Command.prototype.createPlaylist = function (name) {
  * @returns {Command}
  */
 Command.prototype.removePlaylist = function (playlistId) {
-    this.command = commands.REMOVE_PLAYLIST;
+    this.action = commands.REMOVE_PLAYLIST;
     this.playlistId = playlistId;
     return this;
 };
@@ -127,7 +137,7 @@ Command.prototype.removePlaylist = function (playlistId) {
  * @returns {Command}
  */
 Command.prototype.addTrackToPlaylist = function (playlistId, trackId) {
-    this.command = commands.ADD_TRACK_TO_PLAYLIST;
+    this.action = commands.ADD_TRACK_TO_PLAYLIST;
     this.playlistId = playlistId;
     this.trackId = trackId;
     return this;
@@ -139,7 +149,7 @@ Command.prototype.addTrackToPlaylist = function (playlistId, trackId) {
  * @returns {Command}
  */
 Command.prototype.removeTrackFromPlaylist = function (playlistId, trackId) {
-    this.command = commands.REMOVE_TRACK_FROM_PLAYLIST;
+    this.action = commands.REMOVE_TRACK_FROM_PLAYLIST;
     this.playlistId = playlistId;
     this.trackId = trackId;
     return this;
@@ -150,7 +160,7 @@ Command.prototype.removeTrackFromPlaylist = function (playlistId, trackId) {
  * @returns {Command}
  */
 Command.prototype.getStatus = function () {
-    this.command = commands.GET_STATUS;
+    this.action = commands.GET_STATUS;
     return this;
 };
 
@@ -160,7 +170,7 @@ Command.prototype.getStatus = function () {
  * @returns {Command}
  */
 Command.prototype.playPlaylist = function (playlistId) {
-    this.command = commands.PLAY_PLAYLIST;
+    this.action = commands.PLAY_PLAYLIST;
     this.playlistId = playlistId;
     return this;
 };
@@ -172,7 +182,7 @@ Command.prototype.playPlaylist = function (playlistId) {
  * @returns {Command}
  */
 Command.prototype.playTrackOfPlaylist = function (playlistId, trackId) {
-    this.command = commands.PLAY_TRACK_OF_PLAYLIST;
+    this.action = commands.PLAY_TRACK_OF_PLAYLIST;
     this.playlistId = playlistId;
     this.trackId = trackId;
     return this;
@@ -183,7 +193,7 @@ Command.prototype.playTrackOfPlaylist = function (playlistId, trackId) {
  * @returns {Command}
  */
 Command.prototype.getLibrary = function () {
-    this.command = commands.GET_LIBRARY;
+    this.action = commands.GET_LIBRARY;
     return this;
 };
 /**
@@ -192,7 +202,7 @@ Command.prototype.getLibrary = function () {
  * @returns {Command}
  */
 Command.prototype.setColor = function (color) {
-    this.command = commands.SET_COLOR;
+    this.action = commands.SET_COLOR;
     this.color = color;
     return this;
 };
@@ -204,7 +214,7 @@ Command.prototype.setColor = function (color) {
  * @returns {Command}
  */
 Command.prototype.setRGBColor = function (red, green, blue) {
-    this.command = commands.SET_RGBCOLOR;
+    this.action = commands.SET_RGBCOLOR;
     this.red = red;
     this.green = green;
     this.blue = blue;
@@ -216,7 +226,7 @@ Command.prototype.setRGBColor = function (red, green, blue) {
  * @returns {Command}
  */
 Command.prototype.setWhiteBrightness = function (brightness) {
-    this.command = commands.SET_WHITE_BRIGHTNESS;
+    this.action = commands.SET_WHITE_BRIGHTNESS;
     this.brightness = brightness;
     return this;
 };
@@ -226,7 +236,7 @@ Command.prototype.setWhiteBrightness = function (brightness) {
  * @returns {Command}
  */
 Command.prototype.setAnimationBrightness = function (brightness) {
-    this.command = commands.SET_ANIMATION_BRIGHTNESS;
+    this.action = commands.SET_ANIMATION_BRIGHTNESS;
     this.brightness = brightness;
     return this;
 };
@@ -236,9 +246,20 @@ Command.prototype.setAnimationBrightness = function (brightness) {
  * @returns {Command}
  */
 Command.prototype.setColorMode = function (mode) {
-    this.command = commands.SET_COLOR_MODE;
+    this.action = commands.SET_COLOR_MODE;
     this.colorMode = mode;
     return this;
+};
+
+/**
+ * Sendet den Befehl ab.
+ * Das selbe wie <code>connect.send(command)</code>
+ */
+Command.prototype.send = function () {
+    if (this.action.length == 0) {
+        throw new Error("Befehl nicht gesetzt!");
+    }
+    connect.send(this);
 };
 
 /**
@@ -254,6 +275,7 @@ Command.prototype.setColorMode = function (mode) {
  */
 var commands = {
     PLAY: "play",
+    PLAY_ID: "play_id",
     PLAY_FROM_POSITION: "playFromPosition",
     PAUSE: "pause",
     STOP: "stop",

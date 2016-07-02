@@ -1,0 +1,37 @@
+
+#playbar .glyphicon {
+    font-size: 1.5em;
+    display: inline;
+}
+
+#playbar-title-slider-box {
+    color: #9d9d9d;
+    flex-grow: 1;
+}
+
+#playbar-slider-progress-box {
+    display: flex;
+}
+
+#playbar-container {
+    display: flex;
+}
+
+#playbar-title {
+    color: #dddddd;
+}
+
+#playbar-titlebar {
+    padding: 0;
+    text-align: center;
+}
+
+#playbar-title-slider-box {
+    float: left;
+    width: 60%;
+}
+
+#playbar-slider {
+    margin: 0 15px;
+    flex-grow: 1;
+}

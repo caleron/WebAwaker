@@ -1,5 +1,11 @@
-.main {
-    margin-top: 60px;
+html {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+body {
+    padding: 60px 0;
+    overflow-x: hidden;
 }
 
 .sidebar ul {
@@ -14,5 +20,15 @@
     left: 0;
     right: 0;
     width: 60%;
+    display: none;
+}
+
+.nav-sidebar > .active > a, .nav-sidebar > .active > a:hover, .nav-sidebar > .active > a:focus {
+    color: white;
+    background-color: #428bca;
+    border-radius: 3px;
+}
+
+.main-view {
     display: none;
 }

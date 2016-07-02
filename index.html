@@ -2,19 +2,28 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Awaker</title>
     <link rel="stylesheet" href="css/bootstrap.css"/>
     <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/bootstrap-slider.css"/>
+    <link rel="stylesheet" href="css/light.css"/>
+    <link rel="stylesheet" href="css/playbar.css"/>
 
     <!-- Bootstrap funktioniert noch nicht mit jQuery v3 -->
     <script src="js/jquery-2.2.4.js"></script>
     <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap-slider.js"></script>
     <script src="js/command.js"></script>
-    <script src="js/connect.js"></script>
     <script src="js/handlebars-v4.0.5.js"></script>
-    <script src="js/init.js"></script>
     <script src="js/status.js"></script>
+    <script src="js/connect.js"></script>
+    <script src="js/view_controller.js"></script>
+    <script src="js/light_controller.js"></script>
+    <script src="js/music_list_controller.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/playbar_controller.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -39,27 +48,92 @@
         </div>
     </div>
 </nav>
+
+<nav id="playbar" class="navbar navbar-inverse navbar-fixed-bottom">
+    <div id="playbar-container" class="container">
+        <ul class="nav navbar-nav">
+            <li><a href="#" id="playbar-back-btn"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li><a href="#" id="playbar-play-btn"><span class="glyphicon glyphicon-play"></span></a></li>
+            <li><a href="#" id="playbar-next-btn"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+        </ul>
+        <div id="playbar-title-slider-box">
+            <div id="playbar-titlebar"><span id="playbar-title">Titel</span> - <span id="playbar-artist">Künstler</span>
+            </div>
+            <div id="playbar-slider-progress-box">
+                <span id="playbar-progress-label">0:31</span>
+                <input type="text" id="playbar-box" data-slider-id='playbar-slider'>
+                <span id="playbar-track-length-label">4:27</span>
+            </div>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="#" id="playbar-shuffle-btn"><span class="glyphicon glyphicon-random"></span></a></li>
+            <li><a href="#" id="playbar-repeat-btn"><span class="glyphicon glyphicon-repeat"></span></a></li>
+        </ul>
+    </div>
+</nav>
 <div class="container main">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-xs-6 col-sm-3 sidebar hidden-xs">
-            <ul class="nav">
-                <li><a href="#">Licht</a></li>
+        <div id="sidebar" class="col-xs-6 col-sm-3 sidebar hidden-xs">
+            <ul class="nav nav-sidebar">
+                <li data-view="light"><a href="#">Licht</a></li>
             </ul>
-            <ul class="nav">
-                <li><a href="#">Alle Tracks</a></li>
+            <ul class="nav nav-sidebar">
+                <li data-view="music"><a href="#">Alle Tracks</a></li>
             </ul>
-            <ul class="nav">
-                <li><a href="#">Künstler</a></li>
-                <li><a href="#">Alben</a></li>
-                <li><a href="#">Playlists</a></li>
+            <ul class="nav nav-sidebar">
+                <li data-view="music" data-subview="artists"><a href="#">Künstler</a></li>
+                <li data-view="music" data-subview="albums"><a href="#">Alben</a></li>
+                <li data-view="music" data-subview="playlists"><a href="#">Playlists</a></li>
             </ul>
         </div>
 
         <!-- main content-->
         <div class="col-xs-12 col-sm-9">
-            <div id="music-list" class="list-group">
+            <div id="view-music" class="main-view">
+                <div id="view-music-list" class="list-group">
 
+                </div>
+            </div>
+
+            <div id="view-light" class="main-view">
+                <div class="form-group">
+                    <label for="light-white-brightness-box">Weißes Licht</label><br>
+                    <input type="text" id="light-white-brightness-box" data-slider-id='light-white-brightness-slider'
+                           data-color="white">
+                </div>
+                <div class="form-group">
+                    <label for="light-animation-brightness-box">Animationshelligkeit</label><br>
+                    <input type="text" id="light-animation-brightness-box"
+                           data-slider-id='light-animation-brightness-slider' data-color="anim">
+                </div>
+
+                <div class="form-group">
+                    <label for="light-animation-brightness-box">Farbmodus</label><br>
+                    <select name="colorMode" id="light-color-mode-box" class="form-control">
+                        <option value="music">Musik</option>
+                        <option value="rgb">Farbkanäle</option>
+                        <option value="circle">Farbkreis</option>
+                        <option value="anim">Animation</option>
+                    </select>
+                </div>
+                <div id="light-color-mode-rgb-box" class="well light-color-mode-panel">
+                    <div class="form-group">
+                        <label for="light-red-brightness-box">Rot</label><br>
+                        <input type="text" id="light-red-brightness-box"
+                               data-slider-id='light-red-brightness-slider' data-color="red">
+                    </div>
+                    <div class="form-group">
+                        <label for="light-green-brightness-box">Grün</label><br>
+                        <input type="text" id="light-green-brightness-box"
+                               data-slider-id='light-green-brightness-slider' data-color="green">
+                    </div>
+                    <div class="form-group">
+                        <label for="light-blue-brightness-box">Blau</label><br>
+                        <input type="text" id="light-blue-brightness-box"
+                               data-slider-id='light-blue-brightness-slider' data-color="blue">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -71,9 +145,9 @@
 </div>
 
 <script id="music-list-item-template" type="text/x-handlebars-template">
-    <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">Titel</h4>
-        <span>Künstler</span>
+    <a href="#" class="list-group-item" onclick="return false;" data-id="{{id}}">
+        <h4 class="list-group-item-heading">{{title}}</h4>
+        <span>{{artist}}</span>
     </a>
 </script>
 </body>
