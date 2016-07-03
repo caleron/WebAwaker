@@ -27,10 +27,13 @@ viewController.init = function () {
     playbarController.init();
 
     sidebar.find("li").filter("[data-view='light']").addClass("active");
-    viewController.showView("light");
+    viewController.showView("light", "light");
 };
 
 viewController.showView = function (view, subView) {
+    $("#sidebar").find("li").removeClass("active");
+    $("#sidebar-" + view + "-" + subView).addClass("active");
+
     if (viewController.views[view]) {
         $(".main-view").hide();
         $("#view-" + view).show();
@@ -42,9 +45,7 @@ viewController.showView = function (view, subView) {
 };
 
 viewController.sidebarClick = function () {
-    $("#sidebar").find("li").removeClass("active");
     var el = $(this);
-    el.addClass("active");
 
     viewController.showView(el.data("view"), el.data("subview"));
 };

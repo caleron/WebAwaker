@@ -109,6 +109,22 @@ function Timer(fn, time) {
     };
 }
 
+jQuery.fn.selectText = function (start, length) {
+    var selection = window.getSelection();
+    var range = document.createRange();
+    var el = this[0];
+    if (el.constructor.name != "text") {
+        el = el.childNodes[0];
+    }
+    range.setStart(el, start);
+    range.setEnd(el, start + length);
+    selection.addRange(range);
+};
+
+util.clearSelections = function () {
+    window.getSelection().removeAllRanges();
+};
+
 
 //Skript um kaspersky xhr zu blocken
 window.setTimeoutOrig = window.setTimeout;

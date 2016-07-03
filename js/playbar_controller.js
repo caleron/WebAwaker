@@ -19,6 +19,9 @@ playbarController.init = function () {
     $("#playbar-shuffle-btn").click(playbarController.shuffleClick);
 
     playbarController.timer = new Timer(playbarController.incrementPlayPosition, 1000);
+
+    //auf Hotkeys reagieren
+    $("body").keydown(playbarController.windowKeyDown);
 };
 
 /**
@@ -31,19 +34,23 @@ playbarController.slideStop = function (e) {
     new Command().playFromPosition(val).send();
 };
 
+/**
+ *
+ * @param {Status} status
+ */
 playbarController.applyNewStatus = function (status) {
     var icon = $("#playbar-play-btn").find("span");
     if (status.playing) {
         playbarController.timer.start();
-        if (!icon.hasClass("glyphicon-play")) {
-            icon.removeClass("glyphicon-pause");
-            icon.addClass("glyphicon-play");
-        }
-    } else {
-        playbarController.timer.stop();
         if (!icon.hasClass("glyphicon-pause")) {
             icon.removeClass("glyphicon-play");
             icon.addClass("glyphicon-pause");
+        }
+    } else {
+        playbarController.timer.stop();
+        if (!icon.hasClass("glyphicon-play")) {
+            icon.removeClass("glyphicon-pause");
+            icon.addClass("glyphicon-play");
         }
     }
 
@@ -58,6 +65,20 @@ playbarController.applyNewStatus = function (status) {
 
     $("#playbar-title").text(status.currentTitle);
     $("#playbar-artist").text(status.currentArtist);
+
+    if (status.shuffle) {
+        $("#playbar-shuffle-btn").find("span").removeClass("inactive");
+    } else {
+        $("#playbar-shuffle-btn").find("span").addClass("inactive");
+    }
+
+    if (status.repeatMode == 0) {
+        $("#playbar-repeat-btn").find("span").addClass("inactive");
+    } else if (status.repeatMode == 1) {
+        $("#playbar-repeat-btn").find("span").removeClass("inactive");
+    } else if (status.repeatMode == 2) {
+        $("#playbar-repeat-btn").find("span").removeClass("inactive");
+    }
 };
 
 playbarController.incrementPlayPosition = function () {
@@ -88,9 +109,30 @@ playbarController.playPauseClick = function (e) {
 
 playbarController.shuffleClick = function (e) {
     e.preventDefault();
+    new Command().setShuffle(!connect.status.shuffle).send();
 };
 
 playbarController.repeatClick = function (e) {
     e.preventDefault();
+    new Command().setRepeatMode((connect.status.repeatMode + 1) % 3).send();
 };
 
+playbarController.windowKeyDown = function (e) {
+    switch (e.key) {
+        case "MediaPlayPause":
+            new Command().togglePlayPause().send();
+            break;
+        case "MediaTrackPrevious":
+            new Command().playPrevious().send();
+            break;
+        case "MediaTrackNext":
+            new Command().playNext().send();
+            break;
+        case "VolumeUp":
+            break;
+        case "VolumeDown":
+            break;
+        case "VolumeMute":
+            break;
+    }
+};

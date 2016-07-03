@@ -2,6 +2,7 @@
 #playbar .glyphicon {
     font-size: 1.5em;
     display: inline;
+    color: #ff7043;
 }
 
 #playbar-title-slider-box {
@@ -34,4 +35,8 @@
 #playbar-slider {
     margin: 0 15px;
     flex-grow: 1;
+}
+
+#playbar .inactive {
+    color: #9d9d9d;
 }

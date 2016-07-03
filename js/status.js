@@ -12,6 +12,10 @@ function Status() {
     this.currentTitle = "";
     this.currentAlbum = "";
     this.currentArtist = "";
+    /**
+     * Keine Wiederholung 0, Datei wiederholen 1, Alles wiederholen 2
+     * @type {number}
+     */
     this.repeatMode = 0;
     this.shuffle = true;
     this.volume = 70;
