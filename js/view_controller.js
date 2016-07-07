@@ -26,7 +26,6 @@ viewController.init = function () {
 
     playbarController.init();
 
-    sidebar.find("li").filter("[data-view='light']").addClass("active");
     viewController.showView("light", "light");
 };
 

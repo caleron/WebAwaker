@@ -13,11 +13,41 @@ lightController.init = function () {
     };
     lightController.setupSlider($("#light-white-brightness-box"), args);
     lightController.setupSlider($("#light-animation-brightness-box"), args);
+    args.max = 255;
     lightController.setupSlider($("#light-red-brightness-box"), args);
     lightController.setupSlider($("#light-green-brightness-box"), args);
     lightController.setupSlider($("#light-blue-brightness-box"), args);
 
     $("#light-color-mode-box").on("change", lightController.colorModeBoxChange);
+};
+
+/**
+ *
+ * @param {Status} status
+ */
+lightController.newStatus = function (status) {
+    var color = util.colorIntToRGB(status.currentColor);
+    $("#light-white-brightness-slider").slider("setValue", status.whiteBrightness);
+    $("#light-animation-brightness-slider").slider("setValue", status.animationBrightness);
+    
+    $("#light-red-brightness-slider").slider("setValue", color.r);
+    $("#light-green-brightness-slider").slider("setValue", color.g);
+    $("#light-blue-brightness-slider").slider("setValue", color.b);
+
+    var index;
+    switch (status.colorMode) {
+        case "music":
+            index = 0;
+            break;
+        case "colorCircle":
+            index = 3;
+            break;
+        case "custom":
+            index = 1;
+            break;
+
+    }
+    $("#light-color-mode-box").find(":nth-child(" + index + ")").prop("selected", true);
 };
 
 lightController.setupSlider = function (el, args) {

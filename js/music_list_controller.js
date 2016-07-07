@@ -30,6 +30,8 @@ musicListController.newLibrary = function () {
         list.append(template(value));
     });
 
+    $("#music-list-track-" + connect.status.currentTrackId).addClass("active");
+
     list.find(".list-group-item").click(function () {
         var el = $(this);
         var id = el.data("id");
@@ -65,7 +67,7 @@ musicListController.filterList = function (filter) {
         if (el.id == "music-list-dummy") {
             return;
         }
-        
+
         var $el = $(el);
         var title = $el.data("title") + "" || "";
         var artist = $el.data("artist") + "" || "";

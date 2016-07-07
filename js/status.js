@@ -12,6 +12,7 @@ function Status() {
     this.currentTitle = "";
     this.currentAlbum = "";
     this.currentArtist = "";
+    this.currentTrackId = -1;
     /**
      * Keine Wiederholung 0, Datei wiederholen 1, Alles wiederholen 2
      * @type {number}
@@ -55,6 +56,7 @@ Status.prototype.updateStatus = function (newStatus) {
         this.currentTitle = newStatus.currentTitle;
         this.currentAlbum = newStatus.currentAlbum;
         this.currentArtist = newStatus.currentArtist;
+        this.currentTrackId = newStatus.currentTrackId;
         this.repeatMode = newStatus.repeatMode;
         this.shuffle = newStatus.shuffle;
         this.volume = newStatus.volume;
