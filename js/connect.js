@@ -6,7 +6,7 @@ var connect = {
 };
 
 connect.init = function () {
-    var socket = new WebSocket("ws://localhost:4733");
+    var socket = new WebSocket("ws://" + document.location.hostname + ":4733");
     socket.onopen = connect.onOpen;
     socket.onclose = connect.onClose;
     socket.onmessage = connect.onMessage;
