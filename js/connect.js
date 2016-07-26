@@ -6,7 +6,8 @@ var connect = {
 };
 
 connect.init = function () {
-    var socket = new WebSocket("ws://" + document.location.hostname + ":4733");
+    //var socket = new WebSocket("ws://" + document.location.hostname + ":4733");
+    var socket = new WebSocket("ws://192.168.1.102:4733");
     socket.onopen = connect.onOpen;
     socket.onclose = connect.onClose;
     socket.onmessage = connect.onMessage;
@@ -27,7 +28,12 @@ connect.onMessage = function (e) {
         musicListController.newLibrary();
     }
     if (answer.type == "library" || answer.type == "status") {
-        playbarController.applyNewStatus(connect.status, newTrack);
+        playbarController.applyNewStatus(connect.status);
+        lightController.newStatus(connect.status);
+
+        if (newTrack) {
+            musicListController.newTrack();
+        }
     }
 };
 

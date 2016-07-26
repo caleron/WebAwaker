@@ -27,26 +27,27 @@ lightController.init = function () {
  */
 lightController.newStatus = function (status) {
     var color = util.colorIntToRGB(status.currentColor);
-    $("#light-white-brightness-slider").slider("setValue", status.whiteBrightness);
-    $("#light-animation-brightness-slider").slider("setValue", status.animationBrightness);
+    $("#light-white-brightness-box").slider("setValue", status.whiteBrightness);
+    $("#light-animation-brightness-box").slider("setValue", status.animationBrightness);
     
-    $("#light-red-brightness-slider").slider("setValue", color.r);
-    $("#light-green-brightness-slider").slider("setValue", color.g);
-    $("#light-blue-brightness-slider").slider("setValue", color.b);
+    $("#light-red-brightness-box").slider("setValue", color.r);
+    $("#light-green-brightness-box").slider("setValue", color.g);
+    $("#light-blue-brightness-box").slider("setValue", color.b);
 
     var index;
     switch (status.colorMode) {
         case "music":
-            index = 0;
+            index = 1;
             break;
         case "colorCircle":
-            index = 3;
+            index = 4;
             break;
         case "custom":
-            index = 1;
+            index = 2;
             break;
 
     }
+
     $("#light-color-mode-box").find(":nth-child(" + index + ")").prop("selected", true);
 };
 
@@ -84,6 +85,7 @@ lightController.colorModeBoxChange = function () {
 };
 
 lightController.sliderChanged = function (e) {
+    console.log("changed");
     var channel = $(e.target).data("color");
     var newValue = e.value.newValue;
 

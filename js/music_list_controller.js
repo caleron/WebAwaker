@@ -35,9 +35,6 @@ musicListController.newLibrary = function () {
     list.find(".list-group-item").click(function () {
         var el = $(this);
         var id = el.data("id");
-        $("#view-music-list").find(".active").removeClass("active");
-
-        el.addClass("active");
         connect.send(new Command().playId(id));
     });
 
@@ -96,6 +93,14 @@ musicListController.filterList = function (filter) {
     } else {
         $("#music-list-dummy").hide()
     }
+};
+
+musicListController.newTrack = function () {
+    var el = $("#music-list-track-" + connect.status.currentTrackId);
+
+    $("#view-music-list").find(".active").removeClass("active");
+
+    el.addClass("active");
 };
 
 musicListController.unfocusSearchBox = function () {
