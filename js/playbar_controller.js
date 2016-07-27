@@ -24,6 +24,37 @@ playbarController.init = function () {
     $("body").keydown(playbarController.windowKeyDown);
 };
 
+playbarController.adjustLayout = function () {
+    //console.log("adjust now to : " + ResponsiveBootstrapToolkit.current());
+
+    if (ResponsiveBootstrapToolkit.current() == "unrecognized") {
+        window.setTimeout(playbarController.adjustLayout, 200);
+        return;
+    }
+
+    var playbar = $("#playbar-container");
+    var playbackBox = $("#playbar-playback-box");
+    var modesBox = $("#playbar-modes-box");
+
+    var xsRow = $("#playbar-xs-btn-row");
+    if (ResponsiveBootstrapToolkit.is("<sm")) {
+        playbar.css("flex-direction", "column");
+
+        playbackBox.hide();
+        modesBox.hide();
+        xsRow.append(modesBox.children()[0]);
+        xsRow.append(playbackBox.children());
+        xsRow.append(modesBox.children()[0]);
+    } else {
+        playbar.css("flex-direction", "row");
+
+        playbackBox.show();
+        modesBox.show();
+        playbackBox.prepend(xsRow.find(".playbar-playback"));
+        modesBox.append(xsRow.find(".playbar-modes"));
+    }
+};
+
 /**
  *
  * @param {Event} e

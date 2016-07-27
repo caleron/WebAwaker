@@ -11,51 +11,50 @@
     <link rel="stylesheet" href="css/light.css"/>
     <link rel="stylesheet" href="css/playbar.css"/>
 
+    <!--Libraries-->
     <!-- Bootstrap funktioniert noch nicht mit jQuery v3 -->
     <script src="js/jquery-2.2.4.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/bootstrap-slider.js"></script>
-    <script src="js/command.js"></script>
     <script src="js/handlebars-v4.0.5.js"></script>
+    <script src="js/bootstrap-toolkit.js"></script>
+
+    <!--Eigene Scripts-->
+    <script src="js/util.js"></script>
+    <script src="js/command.js"></script>
     <script src="js/status.js"></script>
     <script src="js/connect.js"></script>
     <script src="js/view_controller.js"></script>
     <script src="js/light_controller.js"></script>
     <script src="js/music_list_controller.js"></script>
-    <script src="js/util.js"></script>
     <script src="js/playbar_controller.js"></script>
+    <script src="js/uploader.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Aktuelle Seite</a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <div class="navbar-form navbar-right">
-                <div class="form-group btn-group">
-                    <input id="search-box" type="text" class="form-control" placeholder="Search">
-                    <span id="search-clear-btn" class="glyphicon glyphicon-remove-circle"></span>
-                </div>
-            </div>
+    <div id="navbar-container" class="container-fluid">
+        <button id="nav-show-sidebar-btn" type="button" class="navbar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <div class="navbar-btn pull-right form-group btn-group">
+            <input id="search-box" type="text" class="form-control" placeholder="Search">
+            <span id="search-clear-btn" class="glyphicon glyphicon-remove-circle"></span>
         </div>
     </div>
 </nav>
 
 <nav id="playbar" class="navbar navbar-inverse navbar-fixed-bottom">
     <div id="playbar-container" class="container">
-        <ul class="nav navbar-nav">
-            <li><a href="#" id="playbar-back-btn"><span class="glyphicon glyphicon-step-backward"></span></a></li>
-            <li><a href="#" id="playbar-play-btn"><span class="glyphicon glyphicon-play"></span></a></li>
-            <li><a href="#" id="playbar-next-btn"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+        <ul class="nav navbar-nav" id="playbar-playback-box">
+            <li class="playbar-playback"><a href="#" id="playbar-back-btn"><span
+                    class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li class="playbar-playback"><a href="#" id="playbar-play-btn"><span
+                    class="glyphicon glyphicon-play"></span></a></li>
+            <li class="playbar-playback"><a href="#" id="playbar-next-btn"><span
+                    class="glyphicon glyphicon-step-forward"></span></a></li>
         </ul>
         <div id="playbar-title-slider-box">
             <div id="playbar-titlebar"><span id="playbar-title">Titel</span> - <span id="playbar-artist">Künstler</span>
@@ -66,16 +65,21 @@
                 <span id="playbar-track-length-label">1:40</span>
             </div>
         </div>
-        <ul class="nav navbar-nav">
-            <li><a href="#" id="playbar-shuffle-btn"><span class="glyphicon glyphicon-random"></span></a></li>
-            <li><a href="#" id="playbar-repeat-btn"><span class="glyphicon glyphicon-repeat"></span></a></li>
+        <ul class="nav navbar-nav" id="playbar-modes-box">
+            <li class="playbar-modes"><a href="#" id="playbar-shuffle-btn"><span
+                    class="glyphicon glyphicon-random mode-icon"></span></a></li>
+            <li class="playbar-modes"><a href="#" id="playbar-repeat-btn"><span
+                    class="glyphicon glyphicon-repeat mode-icon"></span></a></li>
+        </ul>
+        <ul class="nav navbar-nav" id="playbar-xs-btn-row">
         </ul>
     </div>
 </nav>
-<div class="container main">
+
+<div class="container">
     <div class="row">
         <!-- Sidebar -->
-        <div id="sidebar" class="col-xs-6 col-sm-3 sidebar hidden-xs">
+        <div id="sidebar" class="col-xs-6 col-sm-3 sidebar">
             <ul class="nav nav-sidebar">
                 <li id="sidebar-light-light" data-view="light" data-subview="light"><a href="#">Licht</a></li>
             </ul>
@@ -91,7 +95,7 @@
         </div>
 
         <!-- main content-->
-        <div class="col-xs-12 col-sm-9">
+        <div id="view-container" class="col-xs-12 col-sm-9">
             <div id="view-music" class="main-view">
                 <div id="view-music-list" class="list-group">
                     <a id="music-list-dummy" href="#" class="list-group-item" onclick="return false;" data-id="{{id}}">
@@ -113,7 +117,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="light-animation-brightness-box">Farbmodus</label><br>
+                    <label for="light-color-mode-box">Farbmodus</label><br>
                     <select name="colorMode" id="light-color-mode-box" class="form-control">
                         <option value="music">Musik</option>
                         <option value="rgb">Farbkanäle</option>

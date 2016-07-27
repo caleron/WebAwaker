@@ -6,11 +6,11 @@ var viewController = {};
 $(function () {
     connect.init();
     viewController.init();
+    uploader.init();
 });
 
 viewController.init = function () {
-    var sidebar = $("#sidebar");
-    sidebar.find("li").click(viewController.sidebarClick);
+    viewController.assignHandlers();
 
     viewController.views = {
         light: lightController,
@@ -29,6 +29,16 @@ viewController.init = function () {
     viewController.showView("light", "light");
 };
 
+viewController.assignHandlers = function () {
+    $("#sidebar").find("li").click(viewController.sidebarClick);
+
+    $(window).resize(ResponsiveBootstrapToolkit.changed(playbarController.adjustLayout));
+
+    playbarController.adjustLayout();
+
+    $("#nav-show-sidebar-btn").click(viewController.toggleSidebar)
+};
+
 viewController.showView = function (view, subView) {
     $("#sidebar").find("li").removeClass("active");
     $("#sidebar-" + view + "-" + subView).addClass("active");
@@ -43,8 +53,17 @@ viewController.showView = function (view, subView) {
     }
 };
 
+viewController.toggleSidebar = function () {
+    $("#view-container").toggleClass("col-xs-offset-6");
+    $("#sidebar").toggleClass("active");
+};
+
 viewController.sidebarClick = function () {
     var el = $(this);
 
     viewController.showView(el.data("view"), el.data("subview"));
+
+    if (ResponsiveBootstrapToolkit.is("xs")) {
+        viewController.toggleSidebar();
+    }
 };

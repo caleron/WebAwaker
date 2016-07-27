@@ -5,9 +5,16 @@ var connect = {
     status: new Status()
 };
 
+connect.hostName = undefined;
+
 connect.init = function () {
-    //var socket = new WebSocket("ws://" + document.location.hostname + ":4733");
-    var socket = new WebSocket("ws://192.168.1.102:4733");
+    if (document.location.hostname == "localhost" && false) {
+        connect.hostName = "192.168.1.102";
+    } else {
+        connect.hostName = document.location.hostname;
+    }
+    var socket = new WebSocket("ws://" + connect.hostName + ":4733");
+
     socket.onopen = connect.onOpen;
     socket.onclose = connect.onClose;
     socket.onmessage = connect.onMessage;

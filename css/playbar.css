@@ -5,6 +5,11 @@
     color: #ff7043;
 }
 
+#playbar-xs-btn-row .mode-icon {
+    font-size: 1em !important;
+    vertical-align: middle;
+}
+
 #playbar-title-slider-box {
     color: #9d9d9d;
     flex-grow: 1;
@@ -16,6 +21,7 @@
 
 #playbar-container {
     display: flex;
+    flex-direction: row;
 }
 
 #playbar-title {
@@ -27,11 +33,6 @@
     text-align: center;
 }
 
-#playbar-title-slider-box {
-    float: left;
-    width: 60%;
-}
-
 #playbar-slider {
     margin: 0 15px;
     flex-grow: 1;
@@ -39,4 +40,9 @@
 
 #playbar .inactive {
     color: #9d9d9d;
+}
+
+#playbar-xs-btn-row {
+    display: flex;
+    justify-content: center;
 }

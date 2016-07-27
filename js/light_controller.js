@@ -34,7 +34,7 @@ lightController.newStatus = function (status) {
     $("#light-green-brightness-box").slider("setValue", color.g);
     $("#light-blue-brightness-box").slider("setValue", color.b);
 
-    var index;
+    var index = 1;
     switch (status.colorMode) {
         case "music":
             index = 1;
