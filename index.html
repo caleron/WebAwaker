@@ -98,7 +98,7 @@
         <div id="view-container" class="col-xs-12 col-sm-9">
             <div id="view-music" class="main-view">
                 <div id="view-music-list" class="list-group">
-                    <a id="music-list-dummy" href="#" class="list-group-item" onclick="return false;" data-id="{{id}}">
+                    <a id="music-list-dummy" href="#" class="list-group-item" onclick="return false;" data-id="">
                         <h4 class="list-group-item-heading">Nichts gefunden</h4>
                     </a>
                 </div>
@@ -152,8 +152,14 @@
     <span>Text</span>
 </div>
 
+<div id="upload-progress" class="alert alert-info" role="alert">
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 60%;"></div>
+    </div>
+</div>
+
 <script id="music-list-item-template" type="text/x-handlebars-template">
-    <a href="#" class="list-group-item" onclick="return false;" id="music-list-track-{{id}}" data-id="{{id}}"
+    <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-track-{{id}}" data-id="{{id}}"
        data-title="{{title}}" data-artist="{{artist}}" data-album="{{album}}">
         <h4 class="list-group-item-heading">{{title}}</h4>
         <span>{{artist}}</span>

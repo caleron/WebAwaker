@@ -3,6 +3,12 @@
  */
 var util = {};
 
+/**
+ *
+ * @param {String} title
+ * @param {String} message
+ * @param {String} type success, info, warning, danger
+ */
 util.showAlert = function (title, message, type) {
     var box = $("#absolute-alert");
 

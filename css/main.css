@@ -23,6 +23,21 @@ body {
     display: none;
 }
 
+#upload-progress {
+    position: fixed;
+    z-index: 5000;
+    margin: auto;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    width: 60%;
+    display: none;
+}
+
+#upload-progress > .progress {
+    margin: 0;
+}
+
 .nav-sidebar > .active > a, .nav-sidebar > .active > a:hover, .nav-sidebar > .active > a:focus {
     color: white;
     background-color: #428bca;

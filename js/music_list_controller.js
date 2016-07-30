@@ -25,6 +25,7 @@ musicListController.newLibrary = function () {
     var template = Handlebars.compile(source);
 
     var list = $("#view-music-list");
+    list.find(".track-item").remove();
 
     tracks.forEach(function (value, key) {
         list.append(template(value));
