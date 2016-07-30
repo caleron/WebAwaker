@@ -117,10 +117,6 @@ playbarController.incrementPlayPosition = function () {
     playbarController.currentPosition++;
     box.slider("setValue", playbarController.currentPosition);
     $("#playbar-progress-label").text(util.timeString(playbarController.currentPosition));
-
-    if (playbarController.currentPosition >= connect.status.trackLength) {
-        new Command().getStatus().send();
-    }
 };
 
 playbarController.previousClick = function (e) {
