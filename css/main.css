@@ -27,7 +27,7 @@ body {
     position: fixed;
     z-index: 5000;
     margin: auto;
-    bottom: 30px;
+    bottom: 60px;
     left: 0;
     right: 0;
     width: 60%;
@@ -36,6 +36,10 @@ body {
 
 #upload-progress > .progress {
     margin: 0;
+}
+
+#upload-progress-text {
+    text-align: center;
 }
 
 .nav-sidebar > .active > a, .nav-sidebar > .active > a:hover, .nav-sidebar > .active > a:focus {

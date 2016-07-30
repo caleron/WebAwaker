@@ -8,7 +8,7 @@ var uploader = {};
 uploader.queue = [];
 
 uploader.currentUploadFilesCount = 0;
-uploader.uploadRunning = false;
+uploader.uploadingFile = false;
 
 uploader.init = function () {
     $(document).on("drag dragstart dragend dragover dragenter dragleave drop", function (e) {
@@ -22,9 +22,9 @@ uploader.init = function () {
             uploader.queue.push(file);
             uploader.currentUploadFilesCount++;
         });
-        uploader.refreshStatus();
+        uploader.refreshStatus(0);
 
-        if (!uploader.uploadRunning) {
+        if (uploader.uploadingFile === false) {
             uploader.uploadNext();
         }
     });
@@ -33,15 +33,15 @@ uploader.init = function () {
 uploader.uploadNext = function () {
     if (uploader.queue.length == 0) {
         $("#upload-progress").hide();
-        uploader.uploadRunning = false;
+        uploader.uploadingFile = false;
         util.showAlert("Upload erfolgreich.", "Alle " + uploader.currentUploadFilesCount + " Dateien wurden erfolgreich hochgeladen", "success");
         uploader.currentUploadFilesCount = 0;
         musicListController.newLibrary();
         return;
     }
-    uploader.uploadRunning = true;
-
     var file = uploader.queue.shift();
+
+    uploader.uploadingFile = file.name.substr(0, 60);
 
 //file als data angeben ist auch möglich, dann wird das mit multipart nicht benötigt
     $.ajax({
@@ -72,8 +72,7 @@ uploader.uploadNext = function () {
 uploader.uploadProgress = function (e) {
     if (e.lengthComputable) {
         var percentComplete = e.loaded / e.total;
-        console.log(percentComplete);
-        //Do something with upload progress
+        uploader.refreshStatus(percentComplete);
     } else {
         console.log("length not computable");
     }
@@ -89,16 +88,18 @@ uploader.uploadSuccess = function (data, textStatus, jqXHR) {
     uploader.uploadNext();
 };
 
-uploader.refreshStatus = function () {
+uploader.refreshStatus = function (progress) {
     var progressBox = $("#upload-progress");
     var progressBar = progressBox.find(".progress-bar");
+    var progressText = $("#upload-progress-text");
+    progress *= 100;
 
     progressBox.show();
     var uploadedFilesCount = uploader.currentUploadFilesCount - uploader.queue.length - 1;
-    var progress = ((uploadedFilesCount / uploader.currentUploadFilesCount) * 100).toFixed(0);
 
     progressBar.css("width", progress + "%");
-    progressBar.text(progress + "% hochgeladen (" + uploadedFilesCount + "/" + uploader.currentUploadFilesCount + ")");
+    progressText.text(progress.toFixed(0) + "% von \"" + uploader.uploadingFile + "\" hochgeladen (Datei "
+                      + uploadedFilesCount + "/" + uploader.currentUploadFilesCount + ")");
 };
 
 uploader.uploadFail = function (jqXHR, textStatus, errorThrown) {

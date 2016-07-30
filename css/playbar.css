@@ -38,6 +38,14 @@
     flex-grow: 1;
 }
 
+#playbar-slider .slider-handle {
+    transition: left 1s linear 0s;
+}
+
+#playbar-slider .slider-selection {
+    background-image: linear-gradient(to bottom, #ff7043 0%, #ea6b3f 100%) !important;
+}
+
 #playbar .inactive {
     color: #9d9d9d;
 }

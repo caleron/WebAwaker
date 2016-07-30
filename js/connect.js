@@ -8,7 +8,7 @@ var connect = {
 connect.hostName = undefined;
 
 connect.init = function () {
-    if (document.location.hostname == "localhost" && false) {
+    if (document.location.hostname == "localhost") {
         connect.hostName = "192.168.1.102";
     } else {
         connect.hostName = document.location.hostname;
