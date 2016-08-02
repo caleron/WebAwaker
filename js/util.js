@@ -80,6 +80,30 @@ util.leadingZero = function (num) {
     }
     return num + "";
 };
+/**
+ * http://stackoverflow.com/a/979325/6655315
+ * @param {String} field
+ * @param {number} reverse
+ * @param {Function|null} [primer]
+ * @returns {Function}
+ */
+util.getSortFunc = function (field, reverse, primer) {
+    var key = primer ?
+        function (x) {
+            return primer(x[field])
+        } :
+        function (x) {
+            return x[field]
+        };
+
+    reverse = !reverse ? 1 : -1;
+
+    return function (a, b) {
+        a = key(a);
+        b = key(b);
+        return reverse * ((a > b) - (b > a));
+    }
+};
 
 /**
  * Klasse, die einen Timer darstellt.
@@ -131,6 +155,19 @@ util.clearSelections = function () {
     window.getSelection().removeAllRanges();
 };
 
+//http://stackoverflow.com/a/35057342/6655315
+/**
+ * Damit lassen sich css-Änderungen in die event-Queue von Objekten einreihen und mit .delay(ms) verzögern.
+ * etwa $("#id").delay(100).qcss("color", "black");
+ */
+$.fn.extend({
+                qcss: function (val1, val2) {
+                    return $(this).queue(function (next) {
+                        $(this).css(val1, val2);
+                        next();
+                    });
+                }
+            });
 
 //Skript um kaspersky xhr zu blocken
 window.setTimeoutOrig = window.setTimeout;

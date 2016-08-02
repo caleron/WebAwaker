@@ -1,0 +1,13 @@
+#view-music-list {
+    clear: both;
+}
+
+#view-music-sort-box {
+    float: right;
+    margin-bottom: 10px;
+}
+
+#view-music-sort-btn {
+    width: 100%;
+    text-align: right;
+}

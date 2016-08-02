@@ -3,15 +3,19 @@
  */
 
 var musicListController = {};
+musicListController.currentSorting = "title";
+musicListController.sortDirection = 0;
 
 musicListController.init = function () {
     musicListController.clearSearchBox();
     $("#search-clear-btn").click(musicListController.clearSearchBox);
 
-    var searchbox = $("#search-box");
-    searchbox.focusin(musicListController.focusSearchBox);
-    searchbox.focusout(musicListController.unfocusSearchBox);
-    searchbox.keyup(musicListController.searchBoxChange);
+    var searchBox = $("#search-box");
+    searchBox.focusin(musicListController.focusSearchBox);
+    searchBox.focusout(musicListController.unfocusSearchBox);
+    searchBox.keyup(musicListController.searchBoxChange);
+
+    $("#view-music-sort-menu").find("a").click(musicListController.sortChange);
 };
 
 musicListController.show = function (subview) {
@@ -19,27 +23,60 @@ musicListController.show = function (subview) {
 };
 
 musicListController.newLibrary = function () {
-    var tracks = connect.status.tracks;
+    musicListController.refreshTrackList();
 
+    $("#music-list-track-" + connect.status.currentTrackId).addClass("active");
+
+    musicListController.filterList($("#search-box").val());
+};
+
+/**
+ *
+ * @param {String} [sortBy]
+ * @param {number} [sortDirection]
+ */
+musicListController.refreshTrackList = function (sortBy, sortDirection) {
+    if (!sortBy) {
+        sortBy = musicListController.currentSorting;
+    }
+    if (sortDirection === undefined) {
+        sortDirection = musicListController.sortDirection;
+    }
+
+    var trackMap = connect.status.tracks;
     var source = $("#music-list-item-template").html();
     var template = Handlebars.compile(source);
 
     var list = $("#view-music-list");
     list.find(".track-item").remove();
 
-    tracks.forEach(function (value, key) {
-        list.append(template(value));
+    var tracks = [];
+    trackMap.forEach(function (value) {
+        tracks.push(value);
     });
 
-    $("#music-list-track-" + connect.status.currentTrackId).addClass("active");
+    tracks.sort(util.getSortFunc(sortBy, sortDirection));
+
+    tracks.forEach(function (value) {
+        list.append(template(value));
+    });
 
     list.find(".list-group-item").click(function () {
         var el = $(this);
         var id = el.data("id");
         connect.send(new Command().playId(id));
     });
+};
 
-    musicListController.filterList($("#search-box").val());
+/**
+ *
+ * @param {Event} e
+ */
+musicListController.sortChange = function (e) {
+    e.preventDefault();
+    var el = $(e.target);
+    $("#view-music-sort-btn").find(".value").text(el.text());
+    musicListController.refreshTrackList(el.data("attr"), el.data("reverse"));
 };
 
 musicListController.searchBoxChange = function () {

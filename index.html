@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/bootstrap-slider.css"/>
     <link rel="stylesheet" href="css/light.css"/>
     <link rel="stylesheet" href="css/playbar.css"/>
+    <link rel="stylesheet" href="css/music_list.css"/>
 
     <!--Libraries-->
     <!-- Bootstrap funktioniert noch nicht mit jQuery v3 -->
@@ -97,6 +98,20 @@
         <!-- main content-->
         <div id="view-container" class="col-xs-12 col-sm-9">
             <div id="view-music" class="main-view">
+                <div class="dropdown" id="view-music-sort-box">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="view-music-sort-btn"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="value">Titel &darr;</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul id="view-music-sort-menu" class="dropdown-menu dropdown-menu-right"
+                        aria-labelledby="view-music-sort-btn">
+                        <li><a href="#" data-attr="title" data-reverse="0">Titel &darr;</a></li>
+                        <li><a href="#" data-attr="title" data-reverse="1">Titel &uarr;</a></li>
+                        <li><a href="#" data-attr="artist" data-reverse="0">Künstler &darr;</a></li>
+                        <li><a href="#" data-attr="artist" data-reverse="1">Künstler &uarr;</a></li>
+                    </ul>
+                </div>
                 <div id="view-music-list" class="list-group">
                     <a id="music-list-dummy" href="#" class="list-group-item" onclick="return false;" data-id="">
                         <h4 class="list-group-item-heading">Nichts gefunden</h4>
