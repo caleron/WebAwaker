@@ -80,7 +80,7 @@ body {
 
     #sidebar {
         left: -50%;
-        position: absolute;
+        position: fixed;
         transition: left 0.3s ease;
     }
 
