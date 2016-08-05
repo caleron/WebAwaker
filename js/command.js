@@ -252,6 +252,42 @@ Command.prototype.setColorMode = function (mode) {
 };
 
 /**
+ * Fährt den Raspberry herunter.
+ * @returns {Command}
+ */
+Command.prototype.shutdownRaspi = function () {
+    this.action = commands.SHUTDOWN_RASPI;
+    return this;
+};
+
+/**
+ * Startet den Raspberry neu.
+ * @returns {Command}
+ */
+Command.prototype.rebootRaspi = function () {
+    this.action = commands.REBOOT_RASPI;
+    return this;
+};
+
+/**
+ * Startet die Serveranwendung neu.
+ * @returns {Command}
+ */
+Command.prototype.rebootServer = function () {
+    this.action = commands.REBOOT_SERVER;
+    return this;
+};
+
+/**
+ * Beendet die Serveranwendung.
+ * @returns {Command}
+ */
+Command.prototype.shutdownServer = function () {
+    this.action = commands.SHUTDOWN_SERVER;
+    return this;
+};
+
+/**
  * Sendet den Befehl ab.
  * Das selbe wie <code>connect.send(command)</code>
  */
@@ -265,13 +301,14 @@ Command.prototype.send = function () {
 /**
  * Objekt mit allen verfügbaren Befehlen.
  *
- * @type {{PLAY: string, PLAY_FROM_POSITION: string, PAUSE: string, STOP: string, TOGGLE_PLAY_PAUSE: string, PLAY_FILE:
- *     string, UPLOAD_AND_PLAY_FILE: string, CHECK_FILE: string, UPLOAD_FILE: string, PLAY_NEXT: string, PLAY_PREVIOUS:
- *     string, SET_SHUFFLE: string, SET_REPEAT_MODE: string, SET_VOLUME: string, SET_WHITE_BRIGHTNESS: string,
- *     SET_ANIMATION_BRIGHTNESS: string, SET_COLOR_MODE: string, SET_COLOR: string, SET_RGBCOLOR: string,
- *     CHANGE_VISUALIZATION: string, CREATE_PLAYLIST: string, REMOVE_PLAYLIST: string, ADD_TRACK_TO_PLAYLIST: string,
- *     REMOVE_TRACK_FROM_PLAYLIST: string, PLAY_PLAYLIST: string, PLAY_TRACK_OF_PLAYLIST: string, GET_STATUS: string,
- *     GET_LIBRARY: string, SEND_STRING: string, SHUTDOWN: string}}
+ * @type {{PLAY: string, PLAY_ID: string, PLAY_FROM_POSITION: string, PAUSE: string, STOP: string, TOGGLE_PLAY_PAUSE:
+ *     string, PLAY_FILE: string, UPLOAD_AND_PLAY_FILE: string, CHECK_FILE: string, UPLOAD_FILE: string, PLAY_NEXT:
+ *     string, PLAY_PREVIOUS: string, SET_SHUFFLE: string, SET_REPEAT_MODE: string, SET_VOLUME: string,
+ *     SET_WHITE_BRIGHTNESS: string, SET_ANIMATION_BRIGHTNESS: string, SET_COLOR_MODE: string, SET_COLOR: string,
+ *     SET_RGBCOLOR: string, CHANGE_VISUALIZATION: string, CREATE_PLAYLIST: string, REMOVE_PLAYLIST: string,
+ *     ADD_TRACK_TO_PLAYLIST: string, REMOVE_TRACK_FROM_PLAYLIST: string, PLAY_PLAYLIST: string,
+ *     PLAY_TRACK_OF_PLAYLIST: string, GET_STATUS: string, GET_LIBRARY: string, SEND_STRING: string, SHUTDOWN_SERVER:
+ *     string, SHUTDOWN_RASPI: string, REBOOT_RASPI: string, REBOOT_SERVER: string}}
  */
 var commands = {
     PLAY: "play",
@@ -304,5 +341,8 @@ var commands = {
     GET_STATUS: "getStatus",
     GET_LIBRARY: "getLibrary",
     SEND_STRING: "sendString",
-    SHUTDOWN: "shutdown"
+    SHUTDOWN_SERVER: "shutdownServer",
+    SHUTDOWN_RASPI: "shutdownRaspi",
+    REBOOT_RASPI: "rebootRaspi",
+    REBOOT_SERVER: "rebootServer"
 };

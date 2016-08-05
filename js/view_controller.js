@@ -32,6 +32,8 @@ viewController.init = function () {
 viewController.assignHandlers = function () {
     $("#sidebar").find("li").click(viewController.sidebarClick);
 
+    $("#modal-control-option-list").find("button").click(viewController.serverControlClick);
+
     $(window).resize(ResponsiveBootstrapToolkit.changed(playbarController.adjustLayout));
 
     playbarController.adjustLayout();
@@ -61,9 +63,36 @@ viewController.toggleSidebar = function () {
 viewController.sidebarClick = function () {
     var el = $(this);
 
-    viewController.showView(el.data("view"), el.data("subview"));
+    if (el[0].id == "sidebar-hack") {
+        $("#modal-control-options").modal("show");
+    } else {
+        viewController.showView(el.data("view"), el.data("subview"));
+    }
+
 
     if (ResponsiveBootstrapToolkit.is("xs")) {
         viewController.toggleSidebar();
     }
+};
+
+viewController.serverControlClick = function (e) {
+    var id = $(this)[0].id;
+
+    switch (id) {
+        case "modal-control-shutdown-server":
+            connect.send(new Command().shutdownServer().send());
+            break;
+        case "modal-control-reboot-server":
+            connect.send(new Command().rebootServer().send());
+            break;
+        case "modal-control-shutdown-raspi":
+            connect.send(new Command().shutdownRaspi().send());
+            break;
+        case "modal-control-reboot-raspi":
+            connect.send(new Command().rebootRaspi().send());
+            break;
+        default:
+            return;
+    }
+    $("#modal-control-options").modal("hide");
 };

@@ -93,6 +93,9 @@
                 <li id="sidebar-music-playlists" data-view="music" data-subview="playlists"><a href="#">Playlists</a>
                 </li>
             </ul>
+            <ul class="nav nav-sidebar">
+                <li id="sidebar-hack"><a href="#">Hack</a></li>
+            </ul>
         </div>
 
         <!-- main content-->
@@ -171,6 +174,30 @@
     <div id="upload-progress-text"></div>
     <div class="progress">
         <div class="progress-bar" role="progressbar" style="width: 60%;"></div>
+    </div>
+</div>
+
+
+<div id="modal-control-options" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Serverkontrolle</h4>
+            </div>
+            <div class="modal-body">
+                <div id="modal-control-option-list" class="list-group">
+                    <button id="modal-control-shutdown-server" class="list-group-item">Server beenden</button>
+                    <button id="modal-control-reboot-server" class="list-group-item">Server neu starten</button>
+                    <button id="modal-control-shutdown-raspi" class="list-group-item">Raspberry herunterfahren</button>
+                    <button id="modal-control-reboot-raspi" class="list-group-item">Raspberry neu starten</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+            </div>
+        </div>
     </div>
 </div>
 
