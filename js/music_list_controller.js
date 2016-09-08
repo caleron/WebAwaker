@@ -8,6 +8,9 @@ musicListController.sortDirection = 0;
 musicListController.currentSubView = "";
 musicListController.invalidateSubview = {"track": true, "artist": true, "album": true, "playlist": true};
 
+/**
+ * Initialisiert den Controller, indem Handler zugewiesen werden.
+ */
 musicListController.init = function () {
     musicListController.clearSearchBox();
     $("#search-clear-btn").click(musicListController.clearSearchBox);
@@ -20,20 +23,29 @@ musicListController.init = function () {
     $("#view-music-sort-menu").find("a").click(musicListController.sortChange);
 };
 
+/**
+ * Zeigt die music-View mit der angegebenen Subview an.
+ * @param {String} subview Die zu zeigende Subview.
+ */
 musicListController.show = function (subview) {
     musicListController.currentSubView = subview;
     $("#view-music").find(".subview").hide();
     $("#view-music-" + subview + "-list").show();
 
-    musicListController.refreshFilterOptions();
+    musicListController.refreshSortOptions();
 
     if (musicListController.invalidateSubview[subview] === true) {
         musicListController.invalidateSubview[subview] = false;
-        musicListController.refreshCurrentList(subview);
+        musicListController.refreshCurrentList();
     }
     musicListController.filterList();
 };
 
+/**
+ * Baut die aktuelle Subview neu auf. Berücksichtigt dabei Sortierung, wenn angegeben.
+ * @param {String} [sortBy] Attribut, nach dem sortiert werden soll.
+ * @param {String} [sortDirection] 0 für Normal, 1 für umgekehrt.
+ */
 musicListController.refreshCurrentList = function (sortBy, sortDirection) {
     switch (musicListController.currentSubView) {
         case "track":
@@ -114,6 +126,9 @@ musicListController.refreshList = function (list, map, sortBy, sortDirection, te
     list.find(".list-group-item").click(musicListController.itemClick);
 };
 
+/**
+ * Wird bei einem Klick auf ein Listeneintrag ausgelöst.
+ */
 musicListController.itemClick = function () {
     var el = $(this);
     var type = el.data("type");
@@ -163,7 +178,7 @@ musicListController.itemClick = function () {
 };
 
 /**
- *
+ * Wird bei einem Klick auf eine andere Sortieroption ausgelöst.
  * @param {Event} e
  */
 musicListController.sortChange = function (e) {
@@ -173,11 +188,17 @@ musicListController.sortChange = function (e) {
     musicListController.refreshCurrentList(el.data("attr"), el.data("reverse"));
 };
 
+/**
+ * Wird ausgelöst, wenn der Suchtext geändert wird.
+ */
 musicListController.searchBoxChange = function () {
     musicListController.filterList($("#search-box").val());
 };
 
-musicListController.refreshFilterOptions = function () {
+/**
+ * Passt die angebotenen Sortieroptionen der aktuellen Subview an.
+ */
+musicListController.refreshSortOptions = function () {
     var options = $("#view-music-sort-menu").children();
     var attr = [];
     switch (musicListController.currentSubView) {
@@ -214,6 +235,10 @@ musicListController.refreshFilterOptions = function () {
     }
 };
 
+/**
+ * Setzt die Option el als aktive Sortierung.
+ * @param {jQuery} el Die angeklickte Sortieroption.
+ */
 musicListController.applySortingToBtn = function (el) {
     var btn = $("#view-music-sort-btn").find(".value");
     btn.text(el.text());
@@ -280,6 +305,9 @@ musicListController.filterList = function (filter) {
     }
 };
 
+/**
+ * Wird ausgelöst, wenn ein neuer Track abgespielt wird. Markiert den aktuellen Track als aktiv.
+ */
 musicListController.newTrack = function () {
     var el = $("#music-list-track-" + connect.status.currentTrackId);
 
@@ -292,11 +320,17 @@ musicListController.unfocusSearchBox = function () {
 
 };
 
+/**
+ * Wird bei einem Klick auf das X in der Suchbox ausgelöst. Entfernt den aktuellen Filter und leert die Suchbox.
+ */
 musicListController.clearSearchBox = function () {
     $("#search-box").val("");
     musicListController.filterList();
 };
 
+/**
+ * Wird ausgelöst, wenn die Suchbox fokussiert wird. Zeigt die music-View an, falls sie noch nicht angezeigt wird.
+ */
 musicListController.focusSearchBox = function () {
     if (viewController.currentView != "music") {
         viewController.showView("music", "track");
