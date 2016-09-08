@@ -80,6 +80,14 @@ util.leadingZero = function (num) {
     }
     return num + "";
 };
+
+util.resetTransition = function (el) {
+    el.addClass("notransition");
+    window.setTimeout(function () {
+        el.removeClass("notransition");
+    }, 100);
+};
+
 /**
  * http://stackoverflow.com/a/979325/6655315
  * @param {String} field

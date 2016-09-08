@@ -72,6 +72,10 @@ body {
     float: left;
 }
 
+.notransition {
+    transition: none !important;
+}
+
 /* collapsed sidebar styles */
 @media screen and (max-width: 767px) {
     #view-container {

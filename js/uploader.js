@@ -39,6 +39,7 @@ uploader.uploadNext = function () {
         musicListController.newLibrary();
         return;
     }
+    util.resetTransition($("#upload-progress").find(".progress-bar"));
     var file = uploader.queue.shift();
 
     uploader.uploadingFile = file.name.substr(0, 60);
