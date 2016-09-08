@@ -2,6 +2,7 @@
  * Created by Patrick on 29.06.2016.
  */
 var viewController = {};
+viewController.currentView = "";
 
 $(function () {
     connect.init();
@@ -42,6 +43,7 @@ viewController.assignHandlers = function () {
 };
 
 viewController.showView = function (view, subView) {
+    viewController.currentView = view;
     $("#sidebar").find("li").removeClass("active");
     $("#sidebar-" + view + "-" + subView).addClass("active");
 

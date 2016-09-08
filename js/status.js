@@ -25,6 +25,8 @@ function Status() {
     this.playing = false;
     this.tracks = new Map();
     this.playLists = new Map();
+    this.artists = new Map();
+    this.albums = new Map();
 }
 
 /**
@@ -69,8 +71,39 @@ Status.prototype.updateStatus = function (newStatus) {
         var length = newStatus.tracks.length;
         this.tracks.clear();
         for (var i = 0; i < length; i++) {
+            //in tracks einfügen, mit ID als key
             this.tracks.set(newStatus.tracks[i].id, newStatus.tracks[i]);
+
+            //in artists einfügen, mit Künstlername als key und Artist-Objekt als value
+            if (newStatus.tracks[i].artist.length > 0) {
+                if (!this.artists.has(newStatus.tracks[i].artist)) {
+                    var artist = new Artist();
+                    artist.artist = newStatus.tracks[i].artist;
+                    this.artists.set(newStatus.tracks[i].artist, artist);
+                }
+                this.artists.get(newStatus.tracks[i].artist).trackList.push(newStatus.tracks[i]);
+            }
+            //in albums einfügen, mit Albumtitel als key und Album-Objekt als value
+            if (newStatus.tracks[i].album) {
+                if (!this.albums.has(newStatus.tracks[i].album)) {
+                    var album = new Album();
+                    album.album = newStatus.tracks[i].album;
+                    album.artist = newStatus.tracks[i].artist;
+                    this.albums.set(newStatus.tracks[i].album, album);
+                }
+                this.albums.get(newStatus.tracks[i].album).trackList.push(newStatus.tracks[i]);
+            }
         }
+        //Tracklisten bei Künstler und Alben sortieren
+        function sortList(value) {
+            value.trackList.sort(util.getSortFunc("title", 0));
+        }
+
+        this.artists.forEach(sortList);
+        this.albums.forEach(sortList);
+        this.playLists.forEach(sortList);
+
+        //playlists einfügen
         length = newStatus.playLists.length;
         this.playLists.clear();
         for (i = 0; i < length; i++) {
@@ -118,5 +151,16 @@ function Playlist(type) {
     /**
      * @type {Array.Number}
      */
+    this.trackList = [];
+}
+
+function Album() {
+    this.album = "";
+    this.artist = "";
+    this.trackList = [];
+}
+
+function Artist() {
+    this.artist = "";
     this.trackList = [];
 }

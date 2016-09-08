@@ -85,12 +85,12 @@
                 <li id="sidebar-light-light" data-view="light" data-subview="light"><a href="#">Licht</a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li id="sidebar-music-tracks" data-view="music" data-subview="tracks"><a href="#">Alle Tracks</a></li>
+                <li id="sidebar-music-track" data-view="music" data-subview="track"><a href="#">Alle Tracks</a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li id="sidebar-music-artists" data-view="music" data-subview="artists"><a href="#">Künstler</a></li>
-                <li id="sidebar-music-albums" data-view="music" data-subview="albums"><a href="#">Alben</a></li>
-                <li id="sidebar-music-playlists" data-view="music" data-subview="playlists"><a href="#">Playlists</a>
+                <li id="sidebar-music-artist" data-view="music" data-subview="artist"><a href="#">Künstler</a></li>
+                <li id="sidebar-music-album" data-view="music" data-subview="album"><a href="#">Alben</a></li>
+                <li id="sidebar-music-playlist" data-view="music" data-subview="playlist"><a href="#">Playlists</a>
                 </li>
             </ul>
             <ul class="nav nav-sidebar">
@@ -104,7 +104,7 @@
                 <div class="dropdown" id="view-music-sort-box">
                     <button class="btn btn-default dropdown-toggle" type="button" id="view-music-sort-btn"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class="value">Titel &darr;</span>
+                        <span class="value" data-attr="title">Titel &darr;</span>
                         <span class="caret"></span>
                     </button>
                     <ul id="view-music-sort-menu" class="dropdown-menu dropdown-menu-right"
@@ -113,10 +113,28 @@
                         <li><a href="#" data-attr="title" data-reverse="1">Titel &uarr;</a></li>
                         <li><a href="#" data-attr="artist" data-reverse="0">Künstler &darr;</a></li>
                         <li><a href="#" data-attr="artist" data-reverse="1">Künstler &uarr;</a></li>
+                        <li><a href="#" data-attr="album" data-reverse="0">Album &darr;</a></li>
+                        <li><a href="#" data-attr="album" data-reverse="1">Album &uarr;</a></li>
                     </ul>
                 </div>
-                <div id="view-music-list" class="list-group">
-                    <a id="music-list-dummy" href="#" class="list-group-item" onclick="return false;" data-id="">
+                <div class="clearfix"></div>
+                <div id="view-music-track-list" class="list-group subview">
+                    <a href="#" class="list-group-item dummy" onclick="return false;" data-id="">
+                        <h4 class="list-group-item-heading">Nichts gefunden</h4>
+                    </a>
+                </div>
+                <div id="view-music-artist-list" class="list-group subview">
+                    <a href="#" class="list-group-item dummy" onclick="return false;" data-id="">
+                        <h4 class="list-group-item-heading">Nichts gefunden</h4>
+                    </a>
+                </div>
+                <div id="view-music-album-list" class="list-group subview">
+                    <a href="#" class="list-group-item dummy" onclick="return false;" data-id="">
+                        <h4 class="list-group-item-heading">Nichts gefunden</h4>
+                    </a>
+                </div>
+                <div id="view-music-playlist-list" class="list-group subview">
+                    <a href="#" class="list-group-item dummy" onclick="return false;" data-id="">
                         <h4 class="list-group-item-heading">Nichts gefunden</h4>
                     </a>
                 </div>
@@ -165,11 +183,13 @@
     </div>
 </div>
 
+<!--Meldungsbox-->
 <div id="absolute-alert" class="alert alert-danger" role="alert">
     <strong>Warnung</strong>
     <span>Text</span>
 </div>
 
+<!--Fortschrittsleiste für Uploads-->
 <div id="upload-progress" class="alert alert-info" role="alert">
     <div id="upload-progress-text"></div>
     <div class="progress">
@@ -177,7 +197,7 @@
     </div>
 </div>
 
-
+<!--Dialog zur Serverkontrolle-->
 <div id="modal-control-options" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -200,12 +220,63 @@
         </div>
     </div>
 </div>
+<!--Dialog zur Anzeige von Alben, Playlists etc.-->
+<div id="modal-music-detail" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="modal-music-list" class="list-group">
 
-<script id="music-list-item-template" type="text/x-handlebars-template">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                <button type="button" class="btn btn-primary">Abspielen</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Template für Tracks-->
+<script id="music-list-track-item-template" type="text/x-handlebars-template">
     <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-track-{{id}}" data-id="{{id}}"
-       data-title="{{title}}" data-artist="{{artist}}" data-album="{{album}}">
+       data-title="{{title}}" data-artist="{{artist}}" data-album="{{album}}" data-type="track">
         <h4 class="list-group-item-heading">{{title}}</h4>
         <span>{{artist}}</span>
+    </a>
+</script>
+<!--Template für Künstler-->
+<script id="music-list-artist-item-template" type="text/x-handlebars-template">
+    <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-artist-{{artist}}"
+       data-artist="{{artist}}" data-type="artist">{{artist}}
+    </a>
+</script>
+<!--Template für Alben-->
+<script id="music-list-album-item-template" type="text/x-handlebars-template">
+    <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-album-{{album}}"
+       data-artist="{{artist}}" data-album="{{album}}" data-type="album">
+        <h4 class="list-group-item-heading">{{album}}</h4>
+        <span>{{artist}}</span>
+    </a>
+</script>
+
+<!--Template für Playlists-->
+<script id="music-list-playlist-item-template" type="text/x-handlebars-template">
+    <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-playlist-{{id}}"
+       data-title="{{title}}" data-type="playlist">
+        <h4 class="list-group-item-heading">{{title}}</h4>
+        <span>{{trackList.length}}</span>
+    </a>
+</script>
+
+<!--Template für Listitems im Dialog modal-music-details-->
+<script id="modal-music-details-item-template" type="text/x-handlebars-template">
+    <a href="#" class="list-group-item track-item" onclick="return false;" data-title="{{title}}" data-type="{{type}}"
+       data-artist="{{artist}}" data-album="{{album}}" data-id="{{id}}">{{title}}
     </a>
 </script>
 </body>

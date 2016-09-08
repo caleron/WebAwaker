@@ -139,6 +139,11 @@ function Timer(fn, time) {
     };
 }
 
+/**
+ * Erweiterung für jQuery zum markieren von Text
+ * @param {Number} start
+ * @param {Number} length
+ */
 jQuery.fn.selectText = function (start, length) {
     var selection = window.getSelection();
     var range = document.createRange();
