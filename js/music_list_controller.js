@@ -150,22 +150,44 @@ musicListController.itemClick = function () {
     if (type == "track") {
         var id = el.data("id");
         new Command().playId(id).send();
-    } else if (type == "artist") {
-        var artist = el.data("artist");
+    } else {
         var modal = $("#modal-music-detail");
         modal.modal("show");
-        modal.find(".modal-title").text(artist);
-
-        var template = Handlebars.compile($("#modal-music-details-item-template").html());
-        var artistData = connect.status.artists.get(artist);
-        var items = artistData.trackList;
-
         var list = $("#modal-music-list");
         list.find(".track-item").remove();
-        items.forEach(function (value) {
-            value.type = "track";
-            list.append(template(value));
-        });
+
+        if (type == "artist") {
+            var artist = el.data("artist");
+            modal.find(".modal-title").text(artist);
+
+            var template = Handlebars.compile($("#modal-music-details-item-template").html());
+            var items = connect.status.artists.get(artist + "").trackList;
+
+            items.forEach(function (value) {
+                value.type = "track";
+                list.append(template(value));
+            });
+        } else if (type == "album") {
+            var album = el.data("album");
+            modal.find(".modal-title").text(album);
+
+            template = Handlebars.compile($("#music-list-track-item-template").html());
+            items = connect.status.albums.get(album + "").trackList;
+
+            items.forEach(function (value) {
+                list.append(template(value));
+            });
+        } else if (type == "playlist") {
+            var playlist = el.data("title");
+            modal.find(".modal-title").text(playlist);
+
+            template = Handlebars.compile($("#music-list-track-item-template").html());
+            items = connect.status.playLists.get(playlist + "").trackList;
+
+            items.forEach(function (value) {
+                list.append(template(value));
+            });
+        }
         list.find(".list-group-item").click(musicListController.itemClick);
     }
 };
