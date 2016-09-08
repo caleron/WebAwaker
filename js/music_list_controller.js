@@ -35,82 +35,49 @@ musicListController.show = function (subview) {
 };
 
 musicListController.refreshCurrentList = function (sortBy, sortDirection) {
-    if (musicListController.currentSubView == "track") {
-        musicListController.refreshTrackList(sortBy, sortDirection);
-    } else if (musicListController.currentSubView == "artist") {
-        musicListController.refreshArtistList(sortBy, sortDirection);
-    } else if (musicListController.currentSubView == "album") {
-        musicListController.refreshAlbumList(sortBy, sortDirection);
-    } else if (musicListController.currentSubView == "playlist") {
-        musicListController.refreshPlaylistList(sortBy, sortDirection);
+    switch (musicListController.currentSubView) {
+        case "track":
+            var map = connect.status.tracks;
+            var id = "#music-list-track-item-template";
+            break;
+
+        case "artist":
+            map = connect.status.artists;
+            id = "#music-list-artist-item-template";
+            break;
+
+        case "album":
+            map = connect.status.albums;
+            id = "#music-list-album-item-template";
+            break;
+
+        case "playlist":
+            map = connect.status.playLists;
+            id = "#music-list-playlist-item-template";
+            break;
+        default:
+            return;
     }
+    var list = $("#view-music-" + musicListController.currentSubView + "-list");
+    var template = Handlebars.compile($(id).html());
+    musicListController.refreshList(list, map, sortBy, sortDirection, template);
 };
 
+/**
+ * Wird ausgelöst, wenn eine neue Library vorhanden ist.
+ */
 musicListController.newLibrary = function () {
     for (var key in musicListController.invalidateSubview) {
         if (musicListController.invalidateSubview.hasOwnProperty(key)) {
             musicListController.invalidateSubview[key] = true;
         }
     }
-
-    musicListController.show(musicListController.currentSubView);
-
-    $("#music-list-track-" + connect.status.currentTrackId).addClass("active");
-
-    musicListController.filterList($("#search-box").val());
+    if (viewController.currentView == "music") {
+        musicListController.show(musicListController.currentSubView);
+        musicListController.filterList($("#search-box").val());
+    }
 };
 
-/**
- * Erzeugt die Track-Liste.
- * @param {String} [sortBy]
- * @param {number} [sortDirection]
- */
-musicListController.refreshTrackList = function (sortBy, sortDirection) {
-    var map = connect.status.tracks;
-    var template = Handlebars.compile($("#music-list-track-item-template").html());
-
-    var list = $("#view-music-track-list");
-    musicListController.refreshList(list, map, sortBy, sortDirection, template);
-};
-
-/**
- * Erzeugt die Track-Liste.
- * @param {String} [sortBy]
- * @param {number} [sortDirection]
- */
-musicListController.refreshArtistList = function (sortBy, sortDirection) {
-    var map = connect.status.artists;
-    var template = Handlebars.compile($("#music-list-artist-item-template").html());
-
-    var list = $("#view-music-artist-list");
-    musicListController.refreshList(list, map, sortBy, sortDirection, template);
-};
-
-/**
- * Erzeugt die Track-Liste.
- * @param {String} [sortBy]
- * @param {number} [sortDirection]
- */
-musicListController.refreshAlbumList = function (sortBy, sortDirection) {
-    var map = connect.status.albums;
-    var template = Handlebars.compile($("#music-list-album-item-template").html());
-
-    var list = $("#view-music-album-list");
-    musicListController.refreshList(list, map, sortBy, sortDirection, template);
-};
-
-/**
- * Erzeugt die Künstler-Liste.
- * @param {String} [sortBy]
- * @param {number} [sortDirection]
- */
-musicListController.refreshPlaylistList = function (sortBy, sortDirection) {
-    var map = connect.status.playLists;
-    var template = Handlebars.compile($("#music-list-playlist-item-template").html());
-
-    var list = $("#view-music-artist-list");
-    musicListController.refreshList(list, map, sortBy, sortDirection, template);
-};
 
 /**
  * Erzeugt eine Liste.
@@ -141,6 +108,9 @@ musicListController.refreshList = function (list, map, sortBy, sortDirection, te
         list.append(template(value));
     });
 
+    if (connect.status.currentTrackId >= 0) {
+        $("#music-list-track-" + connect.status.currentTrackId).addClass("active");
+    }
     list.find(".list-group-item").click(musicListController.itemClick);
 };
 
@@ -328,5 +298,7 @@ musicListController.clearSearchBox = function () {
 };
 
 musicListController.focusSearchBox = function () {
-    viewController.showView("music", "track");
+    if (viewController.currentView != "music") {
+        viewController.showView("music", "track");
+    }
 };
