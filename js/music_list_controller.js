@@ -275,26 +275,56 @@ musicListController.filterList = function (filter) {
         }
 
         var $el = $(el);
+
         var title = $el.data("title") + "" || "";
         var artist = $el.data("artist") + "" || "";
-        title = title.toLowerCase();
-        artist = artist.toLowerCase();
+        var album = $el.data("album") + "" || "";
 
-        var titleIndex = title.indexOf(filter);
-        var artistIndex = artist.indexOf(filter);
+        var titleIndex = title.toLowerCase().indexOf(filter);
+        var artistIndex = artist.toLowerCase().indexOf(filter);
+        var albumIndex = album.toLowerCase().indexOf(filter);
 
         //gefundenen text markieren oder Item verstecken, falls Text nicht vorhanden
-        if (titleIndex !== -1 || artistIndex !== -1) {
-            $el.show();
-            if (titleIndex !== -1) {
-                $el.find("h4").selectText(titleIndex, filter.length);
-            }
-            if (artistIndex !== -1) {
-                $el.find("span").selectText(artistIndex, filter.length);
-            }
-            allHidden = false;
-        } else {
-            $el.hide();
+        switch ($el.data("type")) {
+            case "track":
+                if (titleIndex !== -1 || artistIndex !== -1) {
+                    $el.show();
+                    if (titleIndex !== -1) {
+                        $el.find("h4").selectText(titleIndex, filter.length);
+                    }
+                    if (artistIndex !== -1) {
+                        $el.find("span").selectText(artistIndex, filter.length);
+                    }
+                    allHidden = false;
+                } else {
+                    $el.hide();
+                }
+                break;
+            case "album":
+                if (albumIndex !== -1 || artistIndex !== -1) {
+                    $el.show();
+                    if (albumIndex !== -1) {
+                        $el.find("h4").selectText(albumIndex, filter.length);
+                    }
+                    if (artistIndex !== -1) {
+                        $el.find("span").selectText(artistIndex, filter.length);
+                    }
+                    allHidden = false;
+                } else {
+                    $el.hide();
+                }
+                break;
+            case "artist":
+                if (artistIndex !== -1) {
+                    $el.show();
+                    if (artistIndex !== -1) {
+                        $el.selectText(artistIndex, filter.length);
+                    }
+                    allHidden = false;
+                } else {
+                    $el.hide();
+                }
+                break;
         }
     });
 
@@ -335,4 +365,5 @@ musicListController.focusSearchBox = function () {
     if (viewController.currentView != "music") {
         viewController.showView("music", "track");
     }
+    musicListController.filterList($("#search-box").val());
 };
