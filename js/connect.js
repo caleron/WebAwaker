@@ -42,6 +42,9 @@ connect.onMessage = function (e) {
             musicListController.newTrack();
         }
     }
+    if (answer.type == "config") {
+        config_controller.configAnswerReceived(answer);
+    }
 };
 
 connect.onClose = function (e) {

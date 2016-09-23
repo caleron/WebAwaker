@@ -40,6 +40,9 @@ function Status() {
 Status.prototype.updateStatus = function (newStatus) {
     var newTrack = false;
 
+    if (newStatus.type === "config")
+        return false;
+
     //upload initiieren
     if (newStatus.type === "file_status") {
         if (newStatus.fileNotFound) {
@@ -163,4 +166,11 @@ function Album() {
 function Artist() {
     this.artist = "";
     this.trackList = [];
+}
+
+function Config() {
+    this.name = "";
+    this.value = "";
+    this.config = [];
+    this.configOptions = [];
 }

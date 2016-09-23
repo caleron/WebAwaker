@@ -15,7 +15,8 @@ viewController.init = function () {
 
     viewController.views = {
         light: lightController,
-        music: musicListController
+        music: musicListController,
+        config: config_controller
     };
 
     for (var key in viewController.views) {
