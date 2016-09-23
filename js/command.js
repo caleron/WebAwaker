@@ -286,6 +286,44 @@ Command.prototype.shutdownServer = function () {
     this.action = commands.SHUTDOWN_SERVER;
     return this;
 };
+/**
+ * Ruft den Wert einer Konfigurationsoption ab.
+ * @param {String} name Der Name der Option
+ * @returns {Command}
+ */
+Command.prototype.getConfig = function (name) {
+    this.action = commands.GET_CONFIG;
+    this.name = name;
+    return this;
+};
+/**
+ * Setzt eine Konfigurationsoption
+ * @param {String} name Der Name
+ * @param {String} value Der Wert
+ * @returns {Command}
+ */
+Command.prototype.setConfig = function (name, value) {
+    this.action = commands.SET_CONFIG;
+    this.name = name;
+    this.value = value;
+    return this;
+};
+/**
+ * Ruft die Liste der derzeitigen Einstellungen ab.
+ * @returns {Command}
+ */
+Command.prototype.getConfigList = function () {
+    this.action = commands.GET_CONFIG_LIST;
+    return this;
+};
+/**
+ * Ruft eine Liste aller möglichen Optionen ab.
+ * @returns {Command}
+ */
+Command.prototype.getConfigOptions = function () {
+    this.action = commands.GET_CONFIG_OPTIONS;
+    return this;
+};
 
 /**
  * Sendet den Befehl ab.
@@ -344,5 +382,9 @@ var commands = {
     SHUTDOWN_SERVER: "shutdownServer",
     SHUTDOWN_RASPI: "shutdownRaspi",
     REBOOT_RASPI: "rebootRaspi",
-    REBOOT_SERVER: "rebootServer"
+    REBOOT_SERVER: "rebootServer",
+    GET_CONFIG: "getConfig",
+    SET_CONFIG: "setConfig",
+    GET_CONFIG_LIST: "getConfigList",
+    GET_CONFIG_OPTIONS: "getConfigOptions"
 };
