@@ -9,6 +9,7 @@ config_controller.options = [];
 config_controller.init = function () {
     $("#config-new-config-form").on("submit", config_controller.onsubmit);
     $("#config-new-config-select").change(config_controller.select_change);
+    $("#config-save-btn").click(config_controller.saveConfig);
 };
 
 config_controller.onsubmit = function (e) {
@@ -28,6 +29,33 @@ config_controller.select_change = function () {
         value = config_controller.config[key];
     }
     $("#config-new-config-value").val(value.toString());
+};
+
+config_controller.saveConfig = function () {
+    var inputs = $(".config-input");
+    var changed = [];
+    inputs.each(function () {
+        var el = $(this);
+        var key = el.data("key");
+        var val = config_controller.config[key].toString();
+        var newValue = null;
+
+        if (el.prop("type") == "checkbox") {
+            newValue = el[0].checked.toString();
+        } else {
+            newValue = el.val();
+        }
+
+        if (newValue != val) {
+            new Command().setConfig(key, newValue).send();
+            changed.push(key);
+        }
+    });
+    if (changed.length > 0) {
+        util.showAlert("Geändert", changed.join(", ") + " geändert.", "success");
+    } else {
+        util.showAlert("Nichts geändert", "Keine Änderungen vorgenommen.", "info");
+    }
 };
 
 config_controller.show = function () {

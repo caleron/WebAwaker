@@ -217,7 +217,7 @@
                     </tbody>
                 </table>
                 <div style="text-align: right;">
-                    <button type="button" class="btn btn-primary">Speichern</button>
+                    <button id="config-save-btn" type="button" class="btn btn-primary">Speichern</button>
                 </div>
             </div>
         </div>
@@ -325,7 +325,7 @@
 <script id="config-row-template" type="text/x-handlebars-template">
     <tr>
         <th>{{name}}</th>
-        <td><input class="form-control" type="{{type}}" {{checked}} value="{{value}}"/></td>
+        <td><input class="form-control config-input" data-key="{{name}}" type="{{type}}" {{checked}} value="{{value}}"/></td>
     </tr>
 </script>
 </body>
