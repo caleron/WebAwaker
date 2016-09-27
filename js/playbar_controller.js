@@ -103,11 +103,11 @@ playbarController.applyNewStatus = function (status) {
         $("#playbar-shuffle-btn").find("span").addClass("inactive");
     }
 
-    if (status.repeatMode == 0) {
+    if (status.repeatMode == "none") {
         $("#playbar-repeat-btn").find("span").addClass("inactive");
-    } else if (status.repeatMode == 1) {
+    } else if (status.repeatMode == "track") {
         $("#playbar-repeat-btn").find("span").removeClass("inactive");
-    } else if (status.repeatMode == 2) {
+    } else if (status.repeatMode == "all") {
         $("#playbar-repeat-btn").find("span").removeClass("inactive");
     }
 };
@@ -141,7 +141,19 @@ playbarController.shuffleClick = function (e) {
 
 playbarController.repeatClick = function (e) {
     e.preventDefault();
-    new Command().setRepeatMode((connect.status.repeatMode + 1) % 3).send();
+    var newMode;
+    switch (connect.status.repeatMode) {
+        case "none":
+            newMode = "track";
+            break;
+        case "track":
+            newMode = "all";
+            break;
+        case "all":
+            newMode = "none";
+            break;
+    }
+    new Command().setRepeatMode(newMode).send();
 };
 
 playbarController.windowKeyDown = function (e) {

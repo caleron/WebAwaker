@@ -14,10 +14,10 @@ function Status() {
     this.currentArtist = "";
     this.currentTrackId = -1;
     /**
-     * Keine Wiederholung 0, Datei wiederholen 1, Alles wiederholen 2
-     * @type {number}
+     * Keine Wiederholung "none", Datei wiederholen "track", Alles wiederholen "all"
+     * @type {String}
      */
-    this.repeatMode = 0;
+    this.repeatMode = "all";
     this.shuffle = true;
     this.volume = 70;
     this.trackLength = 100;

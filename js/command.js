@@ -91,8 +91,8 @@ Command.prototype.setShuffle = function (shuffle) {
 };
 
 /**
- * Setzt den Wiederholungsmodus. 0 für keine Wiederholung, 1 für Datei wiederholen und 2 für alles Wiederholen.
- * @param {Number} mode Der Wiederholungsmodus.
+ * Setzt den Wiederholungsmodus. "none" für keine Wiederholung, "track" für Datei wiederholen und "all" für alles Wiederholen.
+ * @param {String} mode Der Wiederholungsmodus.
  * @returns {Command}
  */
 Command.prototype.setRepeatMode = function (mode) {
@@ -396,10 +396,7 @@ var commands = {
     PAUSE: "pause",
     STOP: "stop",
     TOGGLE_PLAY_PAUSE: "togglePlayPause",
-    PLAY_FILE: "playFile",
-    UPLOAD_AND_PLAY_FILE: "uploadAndPlayFile",
     CHECK_FILE: "checkFile",
-    UPLOAD_FILE: "uploadFile",
     PLAY_NEXT: "playNext",
     PLAY_PREVIOUS: "playPrevious",
     SET_SHUFFLE: "setShuffle",
