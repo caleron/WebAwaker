@@ -8,6 +8,9 @@ musicListController.sortDirection = 0;
 musicListController.currentSubView = "";
 musicListController.invalidateSubview = {"track": true, "artist": true, "album": true, "playlist": true};
 
+musicListController.modalDisplayType = "";
+musicListController.modalDisplayTypeData = "";
+
 /**
  * Initialisiert den Controller, indem Handler zugewiesen werden.
  */
@@ -21,6 +24,7 @@ musicListController.init = function () {
     searchBox.keyup(musicListController.searchBoxChange);
 
     $("#view-music-sort-menu").find("a").click(musicListController.sortChange);
+    $("#modal-music-detail-play-btn").click(musicListController.modalPlayClick);
 };
 
 /**
@@ -134,46 +138,83 @@ musicListController.itemClick = function () {
     var type = el.data("type");
     if (type == "track") {
         var id = el.data("id");
-        new Command().playId(id).send();
+        var context = el.data("context");
+
+        if (context == "album" || context == "artist" || context == "playlist") {
+            var items, name;
+            if (context == "album") {
+                name = el.data("album") + "";
+                items = connect.status.albums.get(name).trackList;
+            } else if (context == "artist") {
+                name = el.data("artist") + "";
+                items = connect.status.artists.get(name).trackList;
+            } else {
+                name = el.data("contextData") + "";
+                items = connect.status.playLists.get(name).trackList;
+            }
+            var idList = [];
+            items.forEach(function (el) {
+                idList.push(el.id);
+            });
+            new Command().playIdList(idList, name, id).send();
+        } else {
+            new Command().playId(id).send();
+        }
     } else {
-        var modal = $("#modal-music-detail");
+        var modal = $("#modal-music-detail"),
+            baseObject,
+            list = $("#modal-music-list");
+
         modal.modal("show");
-        var list = $("#modal-music-list");
         list.find(".track-item").remove();
+        musicListController.modalDisplayType = type;
 
         if (type == "artist") {
-            var artist = el.data("artist");
-            modal.find(".modal-title").text(artist);
+            name = el.data("artist").toString();
+            modal.find(".modal-title").text(name);
 
             var template = Handlebars.compile($("#modal-music-details-item-template").html());
-            var items = connect.status.artists.get(artist + "").trackList;
+            items = connect.status.artists.get(name).trackList;
 
-            items.forEach(function (value) {
-                value.type = "track";
-                list.append(template(value));
-            });
+            baseObject = {type: "track", context: "artist"};
         } else if (type == "album") {
-            var album = el.data("album");
-            modal.find(".modal-title").text(album);
+            name = el.data("album").toString();
+            modal.find(".modal-title").text(name);
 
-            template = Handlebars.compile($("#music-list-track-item-template").html());
-            items = connect.status.albums.get(album + "").trackList;
+            template = Handlebars.compile($("#modal-music-details-item-template").html());
+            items = connect.status.albums.get(name).trackList;
 
-            items.forEach(function (value) {
-                list.append(template(value));
-            });
+            baseObject = {type: "track", context: "album"};
         } else if (type == "playlist") {
-            var playlist = el.data("title");
-            modal.find(".modal-title").text(playlist);
+            name = el.data("title").toString();
+            modal.find(".modal-title").text(name);
 
             template = Handlebars.compile($("#music-list-track-item-template").html());
-            items = connect.status.playLists.get(playlist + "").trackList;
+            items = connect.status.playLists.get(name).trackList;
 
-            items.forEach(function (value) {
-                list.append(template(value));
-            });
+            baseObject = {context: "playlist", contextData: name};
         }
+        musicListController.modalDisplayTypeData = name;
+
+        items.forEach(function (value) {
+            list.append(template($.extend({}, baseObject, value)));
+        });
         list.find(".list-group-item").click(musicListController.itemClick);
+    }
+};
+
+musicListController.modalPlayClick = function () {
+    if (musicListController.modalDisplayType == "artist" || musicListController.modalDisplayType == "album") {
+        var items = connect.status[musicListController.modalDisplayType + "s"]
+            .get(musicListController.modalDisplayTypeData).trackList;
+
+        var idList = [];
+        items.forEach(function (el) {
+            idList.push(el.id);
+        });
+        new Command().playIdList(idList, name).send();
+    } else {
+        new Command().playPlaylist(connect.status.playLists.get(musicListController.modalDisplayTypeData).id).send();
     }
 };
 

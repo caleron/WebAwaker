@@ -98,7 +98,8 @@
             </ul>
             <ul class="nav nav-sidebar">
                 <li id="sidebar-hack"><a href="#">Hack</a></li>
-                <li id="sidebar-config-config" data-view="config" data-subview="config"><a href="#">Einstellungen</a></li>
+                <li id="sidebar-config-config" data-view="config" data-subview="config"><a href="#">Einstellungen</a>
+                </li>
             </ul>
         </div>
 
@@ -277,7 +278,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                <button type="button" class="btn btn-primary">Abspielen</button>
+                <button id="modal-music-detail-play-btn" type="button" class="btn btn-primary">Abspielen</button>
             </div>
         </div>
     </div>
@@ -285,7 +286,8 @@
 <!--Template für Tracks-->
 <script id="music-list-track-item-template" type="text/x-handlebars-template">
     <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-track-{{id}}" data-id="{{id}}"
-       data-title="{{title}}" data-artist="{{artist}}" data-album="{{album}}" data-type="track">
+       data-title="{{title}}" data-artist="{{artist}}" data-album="{{album}}" data-type="track"
+       data-context="{{context}}" data-contextData="{{contextData}}">
         <h4 class="list-group-item-heading">{{title}}</h4>
         <span>{{artist}}</span>
     </a>
@@ -317,7 +319,8 @@
 <!--Template für Listitems im Dialog modal-music-details-->
 <script id="modal-music-details-item-template" type="text/x-handlebars-template">
     <a href="#" class="list-group-item track-item" onclick="return false;" data-title="{{title}}" data-type="{{type}}"
-       data-artist="{{artist}}" data-album="{{album}}" data-id="{{id}}">{{title}}
+       data-artist="{{artist}}" data-album="{{album}}" data-id="{{id}}" data-context="{{context}}"
+       data-contextData="{{contextData}}">{{title}}
     </a>
 </script>
 
@@ -325,7 +328,8 @@
 <script id="config-row-template" type="text/x-handlebars-template">
     <tr>
         <th>{{name}}</th>
-        <td><input class="form-control config-input" data-key="{{name}}" type="{{type}}" {{checked}} value="{{value}}"/></td>
+        <td><input class="form-control config-input" data-key="{{name}}" type="{{type}}" {{checked}} value="{{value}}"/>
+        </td>
     </tr>
 </script>
 </body>

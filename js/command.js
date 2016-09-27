@@ -324,6 +324,47 @@ Command.prototype.getConfigOptions = function () {
     this.action = commands.GET_CONFIG_OPTIONS;
     return this;
 };
+/**
+ * Erstellt eine Playlist aus IDs und spielt diese ab.
+ *
+ * @param {int[]} list
+ * @param {String} name
+ * @param {int} [startId]
+ * @returns {Command}
+ */
+Command.prototype.playIdList = function (list, name, startId) {
+    this.action = commands.PLAY_ID_LIST;
+    this.idList = list;
+    this.name = name;
+    if (startId != undefined) {
+        this.trackId = startId;
+    } else {
+        this.trackId = -1;
+    }
+    return this;
+};
+
+/**
+ * Fügt einen Track der Warteschlange hinzu.
+ * @param {int} id
+ * @returns {Command}
+ */
+Command.prototype.addTrackToQueue = function (id) {
+    this.action = commands.ADD_TRACK_TO_QUEUE;
+    this.trackId = id;
+    return this;
+};
+
+/**
+ * Spielt als nächstes den angegebenen Track ab.
+ * @param {int} id
+ * @returns {Command}
+ */
+Command.prototype.playTrackNext = function (id) {
+    this.action = commands.PLAY_TRACK_NEXT;
+    this.trackId = id;
+    return this;
+};
 
 /**
  * Sendet den Befehl ab.
@@ -350,7 +391,7 @@ Command.prototype.send = function () {
  */
 var commands = {
     PLAY: "play",
-    PLAY_ID: "play_id",
+    PLAY_ID: "playId",
     PLAY_FROM_POSITION: "playFromPosition",
     PAUSE: "pause",
     STOP: "stop",
@@ -386,5 +427,8 @@ var commands = {
     GET_CONFIG: "getConfig",
     SET_CONFIG: "setConfig",
     GET_CONFIG_LIST: "getConfigList",
-    GET_CONFIG_OPTIONS: "getConfigOptions"
+    GET_CONFIG_OPTIONS: "getConfigOptions",
+    PLAY_ID_LIST: "playIdList",
+    ADD_TRACK_TO_QUEUE: "addTrackToQueue",
+    PLAY_TRACK_NEXT: "playTrackNext"
 };

@@ -73,6 +73,8 @@ Status.prototype.updateStatus = function (newStatus) {
     if (newStatus.type === "library") {
         var length = newStatus.tracks.length;
         this.tracks.clear();
+        this.albums.clear();
+        this.artists.clear();
         for (var i = 0; i < length; i++) {
             //in tracks einfügen, mit ID als key
             this.tracks.set(newStatus.tracks[i].id, newStatus.tracks[i]);
