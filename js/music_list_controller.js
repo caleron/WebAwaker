@@ -26,6 +26,7 @@ musicListController.init = function () {
 
     $("#view-music-sort-menu").find("a").click(musicListController.sortChange);
     $("#modal-music-detail-play-btn").click(musicListController.modalPlayClick);
+    $("#view-music-play-btn").click(musicListController.playPlaylistClick);
 };
 
 /**
@@ -42,6 +43,9 @@ musicListController.show = function (subview, data) {
 
     if (subview == "playlist") {
         musicListController.currentPlaylistId = data;
+        $("#view-music-play-btn").show();
+    } else {
+        $("#view-music-play-btn").hide();
     }
 
     if (musicListController.invalidateSubview[subview] === true) {
@@ -112,15 +116,6 @@ musicListController.newLibrary = function () {
         musicListController.show(musicListController.currentSubView);
         musicListController.filterList($("#search-box").val());
     }
-
-    //playlists in sidebar aktualisieren
-    var sidebar = $("#sidebar-playlist-list");
-    sidebar.find(".sidebar-playlist-item").remove();
-
-    var template = Handlebars.compile($("#sidebar-playlist-list-item-template").html());
-    connect.status.playLists.forEach(function (playlist) {
-        sidebar.append(template(playlist));
-    });
 };
 
 musicListController.newStatus = function (status) {
@@ -223,10 +218,11 @@ musicListController.itemClick = function () {
             baseObject = {type: "track", context: "album"};
         } else if (type == "playlist") {
             name = el.data("title").toString();
+            id = el.data("option").toString();
             modal.find(".modal-title").text(name);
 
             template = Handlebars.compile($("#music-list-track-item-template").html());
-            items = connect.status.playLists.get(name).trackList;
+            items = connect.status.playLists.get(id).trackList;
 
             baseObject = {context: "playlist", contextData: name};
         }
@@ -251,6 +247,12 @@ musicListController.modalPlayClick = function () {
         new Command().playIdList(idList, name).send();
     } else {
         new Command().playPlaylist(connect.status.playLists.get(musicListController.modalDisplayTypeData).id).send();
+    }
+};
+
+musicListController.playPlaylistClick = function () {
+    if (musicListController.currentSubView == "playlist") {
+        new Command().playPlaylist(musicListController.currentPlaylistId).send();
     }
 };
 

@@ -162,6 +162,7 @@ jQuery.fn.selectText = function (start, length) {
     range.setStart(el, start);
     range.setEnd(el, start + length);
     selection.addRange(range);
+    return this;
 };
 
 util.clearSelections = function () {

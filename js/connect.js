@@ -46,6 +46,7 @@ connect.onMessage = function (e) {
     var newTrack = connect.status.updateStatus(answer);
     if (answer.type == "library") {
         musicListController.newLibrary();
+        sidebarController.newLibrary();
     }
     if (answer.type == "library" || answer.type == "status") {
         playbarController.applyNewStatus(connect.status);

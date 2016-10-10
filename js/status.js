@@ -109,14 +109,20 @@ Status.prototype.updateStatus = function (newStatus) {
 
         this.artists.forEach(sortList);
         this.albums.forEach(sortList);
-        this.playLists.forEach(sortList);
 
         //playlists einfügen
         length = newStatus.playLists.length;
         this.playLists.clear();
+        var status = this;
         for (i = 0; i < length; i++) {
-            this.playLists.set(newStatus.playLists[i].id, newStatus.playLists[i]);
+            var playList = newStatus.playLists[i];
+            playList.trackList = [];
+            playList.trackIdList.forEach(function (id) {
+                playList.trackList.push(status.tracks.get(id));
+            });
+            this.playLists.set(playList.id, playList);
         }
+        this.playLists.forEach(sortList);
     }
 
     return newTrack;
@@ -158,6 +164,11 @@ function Playlist() {
     this.name = "";
     /**
      * @type {Array.Number}
+     */
+    this.trackIdList = [];
+    /**
+     *
+     * @type {Array}
      */
     this.trackList = [];
 }

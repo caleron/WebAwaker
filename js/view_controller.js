@@ -37,10 +37,14 @@ viewController.assignHandlers = function () {
     playbarController.adjustLayout();
 };
 
-viewController.showView = function (view, subView, data) {
+viewController.showView = function (view, subView, data, element) {
     viewController.currentView = view;
     $("#sidebar").find("li").removeClass("active");
-    $("#sidebar-" + view + "-" + subView).addClass("active");
+    if (element) {
+        element.addClass("active");
+    } else {
+        $("#sidebar-" + view + "-" + subView).addClass("active");
+    }
 
     if (viewController.views[view]) {
         $(".main-view").hide();
