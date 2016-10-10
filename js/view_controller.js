@@ -43,7 +43,7 @@ viewController.assignHandlers = function () {
     $("#nav-show-sidebar-btn").click(viewController.toggleSidebar)
 };
 
-viewController.showView = function (view, subView) {
+viewController.showView = function (view, subView, data) {
     viewController.currentView = view;
     $("#sidebar").find("li").removeClass("active");
     $("#sidebar-" + view + "-" + subView).addClass("active");
@@ -52,7 +52,7 @@ viewController.showView = function (view, subView) {
         $(".main-view").hide();
         $("#view-" + view).show();
 
-        viewController.views[view].show(subView);
+        viewController.views[view].show(subView, data);
     } else {
         util.showAlert("Fehler", "unbekannte view " + view, "danger");
     }
@@ -69,7 +69,7 @@ viewController.sidebarClick = function () {
     if (el[0].id == "sidebar-hack") {
         $("#modal-control-options").modal("show");
     } else {
-        viewController.showView(el.data("view"), el.data("subview"));
+        viewController.showView(el.data("view"), el.data("subview"), el.data("option"));
     }
 
 

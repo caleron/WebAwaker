@@ -6,7 +6,8 @@ var musicListController = {};
 musicListController.currentSorting = "title";
 musicListController.sortDirection = 0;
 musicListController.currentSubView = "";
-musicListController.invalidateSubview = {"track": true, "artist": true, "album": true, "playlist": true};
+musicListController.currentPlaylistId = 0;
+musicListController.invalidateSubview = {"track": true, "artist": true, "album": true, "playlist": true, "queue": true};
 
 musicListController.modalDisplayType = "";
 musicListController.modalDisplayTypeData = "";
@@ -30,16 +31,24 @@ musicListController.init = function () {
 /**
  * Zeigt die music-View mit der angegebenen Subview an.
  * @param {String} subview Die zu zeigende Subview.
+ * @param {String} [data] zusätzliche Daten, etwa die ID der Playlist
  */
-musicListController.show = function (subview) {
+musicListController.show = function (subview, data) {
     musicListController.currentSubView = subview;
     $("#view-music").find(".subview").hide();
     $("#view-music-" + subview + "-list").show();
 
     musicListController.refreshSortOptions();
 
+    if (subview == "playlist") {
+        musicListController.currentPlaylistId = data;
+    }
+
     if (musicListController.invalidateSubview[subview] === true) {
         musicListController.invalidateSubview[subview] = false;
+        musicListController.refreshCurrentList();
+    } else if (subview == "playlist" || subview == "queue") {
+        //Playlist und Queue immer updaten
         musicListController.refreshCurrentList();
     }
     musicListController.filterList();
@@ -48,7 +57,7 @@ musicListController.show = function (subview) {
 /**
  * Baut die aktuelle Subview neu auf. Berücksichtigt dabei Sortierung, wenn angegeben.
  * @param {String} [sortBy] Attribut, nach dem sortiert werden soll.
- * @param {String} [sortDirection] 0 für Normal, 1 für umgekehrt.
+ * @param {int} [sortDirection] 0 für Normal, 1 für umgekehrt.
  */
 musicListController.refreshCurrentList = function (sortBy, sortDirection) {
     switch (musicListController.currentSubView) {
@@ -68,8 +77,19 @@ musicListController.refreshCurrentList = function (sortBy, sortDirection) {
             break;
 
         case "playlist":
-            map = connect.status.playLists;
-            id = "#music-list-playlist-item-template";
+            map = connect.status.playLists.get(musicListController.currentPlaylistId).trackList;
+            id = "#music-list-track-item-template";
+            sortBy = "nix";
+            break;
+
+        case "queue":
+            var arr = connect.status.trackQueue;
+            map = new Map();
+            for (var i = 0; i < arr.length; i++) {
+                map.set(i, connect.status.tracks.get(arr[i]));
+            }
+            id = "#music-list-track-item-template";
+            sortBy = "nix";
             break;
         default:
             return;
@@ -92,8 +112,22 @@ musicListController.newLibrary = function () {
         musicListController.show(musicListController.currentSubView);
         musicListController.filterList($("#search-box").val());
     }
+
+    //playlists in sidebar aktualisieren
+    var sidebar = $("#sidebar-playlist-list");
+    sidebar.find(".sidebar-playlist-item").remove();
+
+    var template = Handlebars.compile($("#sidebar-playlist-list-item-template").html());
+    connect.status.playLists.forEach(function (playlist) {
+        sidebar.append(template(playlist));
+    });
 };
 
+musicListController.newStatus = function (status) {
+    if (viewController.currentView == "music" && musicListController.currentSubView == "queue") {
+        musicListController.refreshCurrentList();
+    }
+};
 
 /**
  * Erzeugt eine Liste.
@@ -118,14 +152,16 @@ musicListController.refreshList = function (list, map, sortBy, sortDirection, te
         items.push(value);
     });
 
-    items.sort(util.getSortFunc(sortBy, sortDirection));
+    if (sortBy != "nix") {
+        items.sort(util.getSortFunc(sortBy, sortDirection));
+    }
 
     items.forEach(function (value) {
         list.append(template(value));
     });
 
     if (connect.status.currentTrackId >= 0) {
-        $("#music-list-track-" + connect.status.currentTrackId).addClass("active");
+        $(".track-" + connect.status.currentTrackId).addClass("active");
     }
     list.find(".list-group-item").click(musicListController.itemClick);
 };
@@ -255,6 +291,16 @@ musicListController.refreshSortOptions = function () {
         case "playlist":
             attr = ["title"];
             break;
+        case "queue":
+            //so lassen
+            break;
+    }
+
+    if (attr.length == 0) {
+        $("#view-music-sort-box").hide();
+        return;
+    } else {
+        $("#view-music-sort-box").show();
     }
 
     var firstVisibleOption;
@@ -300,7 +346,7 @@ musicListController.filterList = function (filter) {
 
     if (filter == undefined || filter.length == 0) {
         items.show();
-        if (items.length > 0) {
+        if (items.length > 1) {
             dummy.hide();
         }
         return;
@@ -380,9 +426,9 @@ musicListController.filterList = function (filter) {
  * Wird ausgelöst, wenn ein neuer Track abgespielt wird. Markiert den aktuellen Track als aktiv.
  */
 musicListController.newTrack = function () {
-    var el = $("#music-list-track-" + connect.status.currentTrackId);
+    var el = $(".track-" + connect.status.currentTrackId);
 
-    $("#view-music-track-list").find(".active").removeClass("active");
+    $("#view-music").find(".active").filter(".track-item").removeClass("active");
 
     el.addClass("active");
 };

@@ -84,19 +84,19 @@
     <div class="row">
         <!-- Sidebar -->
         <div id="sidebar" class="col-xs-6 col-sm-3 sidebar">
-            <ul class="nav nav-sidebar">
-                <li id="sidebar-light-light" data-view="light" data-subview="light"><a href="#">Licht</a></li>
-            </ul>
+            <h5><strong>Musik</strong></h5>
             <ul class="nav nav-sidebar">
                 <li id="sidebar-music-track" data-view="music" data-subview="track"><a href="#">Alle Tracks</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
                 <li id="sidebar-music-artist" data-view="music" data-subview="artist"><a href="#">Künstler</a></li>
                 <li id="sidebar-music-album" data-view="music" data-subview="album"><a href="#">Alben</a></li>
-                <li id="sidebar-music-playlist" data-view="music" data-subview="playlist"><a href="#">Playlists</a>
-                </li>
             </ul>
+            <h5><strong>Playlists</strong></h5>
+            <ul id="sidebar-playlist-list" class="nav nav-sidebar">
+                <li id="sidebar-music-queue" data-view="music" data-subview="queue"><a href="#">Warteschlange</a></li>
+            </ul>
+            <h5><strong>Kontrolle</strong></h5>
             <ul class="nav nav-sidebar">
+                <li id="sidebar-light-light" data-view="light" data-subview="light"><a href="#">Licht</a></li>
                 <li id="sidebar-hack"><a href="#">Hack</a></li>
                 <li id="sidebar-config-config" data-view="config" data-subview="config"><a href="#">Einstellungen</a>
                 </li>
@@ -139,6 +139,11 @@
                     </a>
                 </div>
                 <div id="view-music-playlist-list" class="list-group subview">
+                    <a href="#" class="list-group-item dummy" onclick="return false;" data-id="">
+                        <h4 class="list-group-item-heading">Nichts gefunden</h4>
+                    </a>
+                </div>
+                <div id="view-music-queue-list" class="list-group subview">
                     <a href="#" class="list-group-item dummy" onclick="return false;" data-id="">
                         <h4 class="list-group-item-heading">Nichts gefunden</h4>
                     </a>
@@ -285,7 +290,7 @@
 </div>
 <!--Template für Tracks-->
 <script id="music-list-track-item-template" type="text/x-handlebars-template">
-    <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-track-{{id}}" data-id="{{id}}"
+    <a href="#" class="list-group-item track-item track-{{id}}" onclick="return false;" data-id="{{id}}"
        data-title="{{title}}" data-artist="{{artist}}" data-album="{{album}}" data-type="track"
        data-context="{{context}}" data-contextData="{{contextData}}">
         <h4 class="list-group-item-heading">{{title}}</h4>
@@ -307,15 +312,6 @@
     </a>
 </script>
 
-<!--Template für Playlists-->
-<script id="music-list-playlist-item-template" type="text/x-handlebars-template">
-    <a href="#" class="list-group-item track-item" onclick="return false;" id="music-list-playlist-{{id}}"
-       data-title="{{title}}" data-type="playlist">
-        <h4 class="list-group-item-heading">{{title}}</h4>
-        <span>{{trackList.length}}</span>
-    </a>
-</script>
-
 <!--Template für Listitems im Dialog modal-music-details-->
 <script id="modal-music-details-item-template" type="text/x-handlebars-template">
     <a href="#" class="list-group-item track-item" onclick="return false;" data-title="{{title}}" data-type="{{type}}"
@@ -331,6 +327,12 @@
         <td><input class="form-control config-input" data-key="{{name}}" type="{{type}}" {{checked}} value="{{value}}"/>
         </td>
     </tr>
+</script>
+
+<!--Template für Playlist-Eintrag in der Sidebar -->
+<script id="sidebar-playlist-list-item-template" type="text/x-handlebars-template">
+    <li class="sidebar-playlist-item" data-view="music" data-subview="playlist" data-option="{{id}}"><a
+            href="#">{{name}}</a></li>
 </script>
 </body>
 </html>

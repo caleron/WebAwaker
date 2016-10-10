@@ -50,6 +50,7 @@ connect.onMessage = function (e) {
     if (answer.type == "library" || answer.type == "status") {
         playbarController.applyNewStatus(connect.status);
         lightController.newStatus(connect.status);
+        musicListController.newStatus(connect.status);
 
         if (newTrack) {
             musicListController.newTrack();

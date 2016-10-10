@@ -27,6 +27,7 @@ function Status() {
     this.playLists = new Map();
     this.artists = new Map();
     this.albums = new Map();
+    this.trackQueue = [];
 }
 
 /**
@@ -68,6 +69,8 @@ Status.prototype.updateStatus = function (newStatus) {
         this.trackLength = newStatus.trackLength;
         this.playPosition = newStatus.playPosition;
         this.playing = newStatus.playing;
+
+        this.trackQueue = newStatus.trackQueue.trackIdList;
     }
 
     if (newStatus.type === "library") {
@@ -150,7 +153,7 @@ function Track() {
     this.trackLength = "";
 }
 
-function Playlist(type) {
+function Playlist() {
     this.id = 0;
     this.name = "";
     /**
