@@ -5,9 +5,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Awaker</title>
-    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="lib/css/bootstrap.css"/>
+    <link rel="stylesheet" href="lib/css/bootstrap-slider.css"/>
     <link rel="stylesheet" href="css/main.css"/>
-    <link rel="stylesheet" href="css/bootstrap-slider.css"/>
     <link rel="stylesheet" href="css/light.css"/>
     <link rel="stylesheet" href="css/playbar.css"/>
     <link rel="stylesheet" href="css/music_list.css"/>
@@ -15,11 +15,11 @@
 
     <!--Libraries-->
     <!-- Bootstrap funktioniert noch nicht mit jQuery v3 -->
-    <script src="js/jquery-2.2.4.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/bootstrap-slider.js"></script>
-    <script src="js/handlebars-v4.0.5.js"></script>
-    <script src="js/bootstrap-toolkit.js"></script>
+    <script src="lib/js/jquery-2.2.4.js"></script>
+    <script src="lib/js/bootstrap.js"></script>
+    <script src="lib/js/bootstrap-slider.js"></script>
+    <script src="lib/js/handlebars-v4.0.5.js"></script>
+    <script src="lib/js/bootstrap-toolkit.js"></script>
 
     <!--Eigene Scripts-->
     <script src="js/util.js"></script>
@@ -90,7 +90,7 @@
                 <li id="sidebar-music-artist" data-view="music" data-subview="artist"><a href="#">Künstler</a></li>
                 <li id="sidebar-music-album" data-view="music" data-subview="album"><a href="#">Alben</a></li>
             </ul>
-            <h5><strong>Playlists</strong></h5>
+            <h5><strong>Playlists</strong><span id="sidebar-add-playlist" class="glyphicon glyphicon-plus"></span></h5>
             <ul id="sidebar-playlist-list" class="nav nav-sidebar">
                 <li id="sidebar-music-queue" data-view="music" data-subview="queue"><a href="#">Warteschlange</a></li>
             </ul>
