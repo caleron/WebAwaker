@@ -12,6 +12,11 @@ body {
     margin: 10px 0;
 }
 
+#sidebar-add-playlist {
+    float: right;
+    cursor: pointer;
+}
+
 #absolute-alert {
     position: fixed;
     z-index: 5000;
