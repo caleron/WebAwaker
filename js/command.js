@@ -205,6 +205,7 @@ Command.prototype.getLibrary = function () {
 Command.prototype.setColor = function (color) {
     this.action = commands.SET_COLOR;
     this.color = color;
+    this.smooth = false;
     return this;
 };
 /**
@@ -219,6 +220,7 @@ Command.prototype.setRGBColor = function (red, green, blue) {
     this.red = red;
     this.green = green;
     this.blue = blue;
+    this.smooth = false;
     return this;
 };
 /**
@@ -229,6 +231,7 @@ Command.prototype.setRGBColor = function (red, green, blue) {
 Command.prototype.setWhiteBrightness = function (brightness) {
     this.action = commands.SET_WHITE_BRIGHTNESS;
     this.brightness = brightness;
+    this.smooth = false;
     return this;
 };
 /**
@@ -239,6 +242,7 @@ Command.prototype.setWhiteBrightness = function (brightness) {
 Command.prototype.setAnimationBrightness = function (brightness) {
     this.action = commands.SET_ANIMATION_BRIGHTNESS;
     this.brightness = brightness;
+    this.smooth = false;
     return this;
 };
 /**
