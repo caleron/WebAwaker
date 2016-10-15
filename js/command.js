@@ -91,7 +91,8 @@ Command.prototype.setShuffle = function (shuffle) {
 };
 
 /**
- * Setzt den Wiederholungsmodus. "none" für keine Wiederholung, "track" für Datei wiederholen und "all" für alles Wiederholen.
+ * Setzt den Wiederholungsmodus. "none" für keine Wiederholung, "track" für Datei wiederholen und "all" für alles
+ * Wiederholen.
  * @param {String} mode Der Wiederholungsmodus.
  * @returns {Command}
  */
@@ -131,27 +132,27 @@ Command.prototype.removePlaylist = function (playlistId) {
     return this;
 };
 /**
- * Fügt einen Track zu einer Playlist hinzu.
+ * Fügt eine Trackmenge zu einer Playlist hinzu.
  * @param {Number} playlistId Die ID der Playlist
- * @param {Number} trackId Die ID des Tracks.
+ * @param {Array} trackIds Die ID-Liste der Tracks.
  * @returns {Command}
  */
-Command.prototype.addTrackToPlaylist = function (playlistId, trackId) {
-    this.action = commands.ADD_TRACK_TO_PLAYLIST;
+Command.prototype.addTracksToPlaylist = function (playlistId, trackIds) {
+    this.action = commands.ADD_TRACKS_TO_PLAYLIST;
     this.playlistId = playlistId;
-    this.trackId = trackId;
+    this.idList = trackIds;
     return this;
 };
 /**
- * Entfernt einen Track von einer Playlist.
+ * Entfernt eine Trackmenge von einer Playlist.
  * @param {Number} playlistId Die ID der Playlist
- * @param {Number} trackId Die ID des Tracks
+ * @param {Array} trackIds Die ID-Liste der Tracks
  * @returns {Command}
  */
-Command.prototype.removeTrackFromPlaylist = function (playlistId, trackId) {
-    this.action = commands.REMOVE_TRACK_FROM_PLAYLIST;
+Command.prototype.removeTracksFromPlaylist = function (playlistId, trackIds) {
+    this.action = commands.REMOVE_TRACKS_FROM_PLAYLIST;
     this.playlistId = playlistId;
-    this.trackId = trackId;
+    this.idList = trackIds;
     return this;
 };
 
@@ -346,14 +347,37 @@ Command.prototype.playIdList = function (list, name, startId) {
 
 /**
  * Fügt einen Track der Warteschlange hinzu.
- * @param {int} id
+ * @param {Array} trackIds
  * @returns {Command}
  */
-Command.prototype.addTrackToQueue = function (id) {
-    this.action = commands.ADD_TRACK_TO_QUEUE;
-    this.trackId = id;
+Command.prototype.addTracksToQueue = function (trackIds) {
+    this.action = commands.ADD_TRACKS_TO_QUEUE;
+    this.idList = trackIds;
     return this;
 };
+
+/**
+ * Entfernt Tracks von der Warteschlange.
+ * @param {Array} trackIds
+ * @returns {Command}
+ */
+Command.prototype.removeTracksFromQueue = function (trackIds) {
+    this.action = commands.REMOVE_TRACKS_FROM_QUEUE;
+    this.idList = trackIds;
+    return this;
+};
+
+/**
+ * Spielt den angegebenen Song aus der Queue.
+ * @param trackId ID des Tracks
+ * @returns {Command}
+ */
+Command.prototype.playTrackOfQueue = function (trackId) {
+    this.action = commands.PLAY_TRACK_OF_QUEUE;
+    this.trackId = trackId;
+    return this;
+};
+
 
 /**
  * Spielt als nächstes den angegebenen Track ab.
@@ -381,13 +405,15 @@ Command.prototype.send = function () {
  * Objekt mit allen verfügbaren Befehlen.
  *
  * @type {{PLAY: string, PLAY_ID: string, PLAY_FROM_POSITION: string, PAUSE: string, STOP: string, TOGGLE_PLAY_PAUSE:
- *     string, PLAY_FILE: string, UPLOAD_AND_PLAY_FILE: string, CHECK_FILE: string, UPLOAD_FILE: string, PLAY_NEXT:
- *     string, PLAY_PREVIOUS: string, SET_SHUFFLE: string, SET_REPEAT_MODE: string, SET_VOLUME: string,
- *     SET_WHITE_BRIGHTNESS: string, SET_ANIMATION_BRIGHTNESS: string, SET_COLOR_MODE: string, SET_COLOR: string,
- *     SET_RGBCOLOR: string, CHANGE_VISUALIZATION: string, CREATE_PLAYLIST: string, REMOVE_PLAYLIST: string,
- *     ADD_TRACK_TO_PLAYLIST: string, REMOVE_TRACK_FROM_PLAYLIST: string, PLAY_PLAYLIST: string,
- *     PLAY_TRACK_OF_PLAYLIST: string, GET_STATUS: string, GET_LIBRARY: string, SEND_STRING: string, SHUTDOWN_SERVER:
- *     string, SHUTDOWN_RASPI: string, REBOOT_RASPI: string, REBOOT_SERVER: string}}
+ *     string, CHECK_FILE: string, PLAY_NEXT: string, PLAY_PREVIOUS: string, SET_SHUFFLE: string, SET_REPEAT_MODE:
+ *     string, SET_VOLUME: string, SET_WHITE_BRIGHTNESS: string, SET_ANIMATION_BRIGHTNESS: string, SET_COLOR_MODE:
+ *     string, SET_COLOR: string, SET_RGBCOLOR: string, CHANGE_VISUALIZATION: string, CREATE_PLAYLIST: string,
+ *     REMOVE_PLAYLIST: string, ADD_TRACKS_TO_PLAYLIST: string, REMOVE_TRACKS_FROM_PLAYLIST: string, PLAY_PLAYLIST:
+ *     string, PLAY_TRACK_OF_PLAYLIST: string, GET_STATUS: string, GET_LIBRARY: string, SEND_STRING: string,
+ *     SHUTDOWN_SERVER: string, SHUTDOWN_RASPI: string, REBOOT_RASPI: string, REBOOT_SERVER: string, GET_CONFIG:
+ *     string, SET_CONFIG: string, GET_CONFIG_LIST: string, GET_CONFIG_OPTIONS: string, PLAY_ID_LIST: string,
+ *     ADD_TRACKS_TO_QUEUE: string, REMOVE_TRACKS_FROM_QUEUE: string, PLAY_TRACK_NEXT: string, PLAY_TRACK_OF_QUEUE:
+ *     string}}
  */
 var commands = {
     PLAY: "play",
@@ -410,8 +436,8 @@ var commands = {
     CHANGE_VISUALIZATION: "changeVisualization",
     CREATE_PLAYLIST: "createPlaylist",
     REMOVE_PLAYLIST: "removePlaylist",
-    ADD_TRACK_TO_PLAYLIST: "addTrackToPlaylist",
-    REMOVE_TRACK_FROM_PLAYLIST: "removeTrackFromPlaylist",
+    ADD_TRACKS_TO_PLAYLIST: "addTracksToPlaylist",
+    REMOVE_TRACKS_FROM_PLAYLIST: "removeTracksFromPlaylist",
     PLAY_PLAYLIST: "playPlaylist",
     PLAY_TRACK_OF_PLAYLIST: "playTrackOfPlaylist",
     GET_STATUS: "getStatus",
@@ -426,6 +452,8 @@ var commands = {
     GET_CONFIG_LIST: "getConfigList",
     GET_CONFIG_OPTIONS: "getConfigOptions",
     PLAY_ID_LIST: "playIdList",
-    ADD_TRACK_TO_QUEUE: "addTrackToQueue",
-    PLAY_TRACK_NEXT: "playTrackNext"
+    ADD_TRACKS_TO_QUEUE: "addTracksToQueue",
+    REMOVE_TRACKS_FROM_QUEUE: "removeTracksFromQueue",
+    PLAY_TRACK_NEXT: "playTrackNext",
+    PLAY_TRACK_OF_QUEUE: "playTrackOfQueue"
 };

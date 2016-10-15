@@ -11,11 +11,19 @@ uploader.currentUploadFilesCount = 0;
 uploader.uploadingFile = false;
 
 uploader.init = function () {
-    $(document).on("drag dragstart dragend dragover dragenter dragleave drop", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    //$(document).on("drag dragstart dragend dragover dragenter dragleave drop", function (e) {
+    $(document).on("drag dragover", function (e) {
+        if (dragController.eventContainsFiles(e.originalEvent)) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     }).on("drop", function (e) {
+        e.preventDefault();
         var droppedFiles = e.originalEvent.dataTransfer.files;
+
+        if (droppedFiles.length == 0)
+            return;
+
         console.log(droppedFiles);
 
         $.each(droppedFiles, function (i, file) {
@@ -29,6 +37,7 @@ uploader.init = function () {
         }
     });
 };
+
 
 uploader.uploadNext = function () {
     if (uploader.queue.length == 0) {

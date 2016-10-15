@@ -12,12 +12,13 @@ sidebarController.newLibrary = function () {
     //playlists in sidebar aktualisieren
     var sidebar = $("#sidebar-playlist-list");
     sidebar.find(".sidebar-playlist-item").remove();
-
+    console.log("newlibrary");
     var template = Handlebars.compile($("#sidebar-playlist-list-item-template").html());
     connect.status.playLists.forEach(function (playlist) {
         sidebar.append(template(playlist));
     });
     sidebar.find(".sidebar-playlist-item").click(sidebarController.sidebarClick);
+    dragController.setupDropOnPlayLists();
 };
 
 sidebarController.sidebarClick = function () {
@@ -83,6 +84,7 @@ sidebarController.savePlaylist = function (e) {
     } else {
         new Command().createPlaylist(text).send();
     }
+    el.remove();
 };
 
 sidebarController.serverControlClick = function () {

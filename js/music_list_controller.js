@@ -42,7 +42,15 @@ musicListController.show = function (subview, data) {
     musicListController.refreshSortOptions();
 
     if (subview == "playlist") {
-        musicListController.currentPlaylistId = data;
+        if (data != undefined) {
+            musicListController.currentPlaylistId = data;
+        }
+
+        if (!connect.status.playLists.has(musicListController.currentPlaylistId)) {
+            //falls die playlist nicht mehr existiert, queue anzeigen
+            viewController.showView("music", "queue");
+            return;
+        }
         $("#view-music-play-btn").show();
     } else {
         $("#view-music-play-btn").hide();
@@ -64,10 +72,11 @@ musicListController.show = function (subview, data) {
  * @param {int} [sortDirection] 0 für Normal, 1 für umgekehrt.
  */
 musicListController.refreshCurrentList = function (sortBy, sortDirection) {
+    var map, id, baseContext;
     switch (musicListController.currentSubView) {
         case "track":
-            var map = connect.status.tracks;
-            var id = "#music-list-track-item-template";
+            map = connect.status.tracks;
+            id = "#music-list-track-item-template";
             break;
 
         case "artist":
@@ -84,6 +93,7 @@ musicListController.refreshCurrentList = function (sortBy, sortDirection) {
             map = connect.status.playLists.get(musicListController.currentPlaylistId).trackList;
             id = "#music-list-track-item-template";
             sortBy = "nix";
+            baseContext = {context: "playlist"};
             break;
 
         case "queue":
@@ -93,6 +103,7 @@ musicListController.refreshCurrentList = function (sortBy, sortDirection) {
                 map.set(i, connect.status.tracks.get(arr[i]));
             }
             id = "#music-list-track-item-template";
+            baseContext = {context: "queue"};
             sortBy = "nix";
             break;
         default:
@@ -100,7 +111,7 @@ musicListController.refreshCurrentList = function (sortBy, sortDirection) {
     }
     var list = $("#view-music-" + musicListController.currentSubView + "-list");
     var template = Handlebars.compile($(id).html());
-    musicListController.refreshList(list, map, sortBy, sortDirection, template);
+    musicListController.refreshList(list, map, sortBy, sortDirection, template, baseContext);
 };
 
 /**
@@ -131,8 +142,9 @@ musicListController.newStatus = function (status) {
  * @param {String} [sortBy]
  * @param {number} [sortDirection]
  * @param template
+ * @param {Object} baseContext
  */
-musicListController.refreshList = function (list, map, sortBy, sortDirection, template) {
+musicListController.refreshList = function (list, map, sortBy, sortDirection, template, baseContext) {
     if (!sortBy) {
         sortBy = musicListController.currentSorting;
     }
@@ -152,13 +164,18 @@ musicListController.refreshList = function (list, map, sortBy, sortDirection, te
     }
 
     items.forEach(function (value) {
-        list.append(template(value));
+        if (baseContext) {
+            list.append(template($.extend({}, baseContext, value)));
+        } else {
+            list.append(template(value));
+        }
     });
 
     if (connect.status.currentTrackId >= 0) {
         $(".track-" + connect.status.currentTrackId).addClass("active");
     }
     list.find(".list-group-item").click(musicListController.itemClick);
+    dragController.setupDraggingListItems();
 };
 
 /**
@@ -166,30 +183,39 @@ musicListController.refreshList = function (list, map, sortBy, sortDirection, te
  */
 musicListController.itemClick = function () {
     var el = $(this);
+    if (el.hasClass("dummy")) {
+        return;
+    }
+
     var type = el.data("type");
     if (type == "track") {
         var id = el.data("id");
         var context = el.data("context");
 
-        if (context == "album" || context == "artist" || context == "playlist") {
+        if (context == "album" || context == "artist") {
             var items, name;
             if (context == "album") {
                 name = el.data("album") + "";
                 items = connect.status.albums.get(name).trackList;
-            } else if (context == "artist") {
+            } else {
                 name = el.data("artist") + "";
                 items = connect.status.artists.get(name).trackList;
-            } else {
-                name = el.data("contextData") + "";
-                items = connect.status.playLists.get(name).trackList;
             }
             var idList = [];
             items.forEach(function (el) {
                 idList.push(el.id);
             });
             new Command().playIdList(idList, name, id).send();
+
+        } else if (context == "playlist") {
+            new Command().playTrackOfPlaylist(musicListController.currentPlaylistId, id).send();
+
+        } else if (context == "queue") {
+            new Command().playTrackOfQueue(id).send();
+
         } else {
             new Command().playId(id).send();
+
         }
     } else {
         var modal = $("#modal-music-detail"),
