@@ -59,18 +59,22 @@ Status.prototype.updateStatus = function (newStatus) {
         this.currentColor = newStatus.currentColor;
         this.whiteBrightness = newStatus.whiteBrightness;
         this.animationBrightness = newStatus.animationBrightness;
+        this.repeatMode = newStatus.repeatMode;
+        this.shuffle = newStatus.shuffle;
+        this.volume = newStatus.volume;
+
         this.currentTitle = newStatus.currentTitle;
         this.currentAlbum = newStatus.currentAlbum;
         this.currentArtist = newStatus.currentArtist;
         this.currentTrackId = newStatus.currentTrackId;
-        this.repeatMode = newStatus.repeatMode;
-        this.shuffle = newStatus.shuffle;
-        this.volume = newStatus.volume;
         this.trackLength = newStatus.trackLength;
         this.playPosition = newStatus.playPosition;
         this.playing = newStatus.playing;
 
-        this.trackQueue = newStatus.trackQueue.trackIdList;
+        //wenn TrackQueue noch nicht gesetzt ist, existiert noch kein playback
+        if (newStatus.trackQueue) {
+            this.trackQueue = newStatus.trackQueue.trackIdList;
+        }
     }
 
     if (newStatus.type === "library") {
